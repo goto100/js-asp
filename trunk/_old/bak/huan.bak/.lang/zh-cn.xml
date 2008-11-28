@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<languages>
+	<items page="common">
+		<item id="noPermission">您没有执行此操作的权限</item>
+		<item id="badURL">错误的访问</item>
+		<item id="siteClosed">网站已关闭，请稍候访问。</item>
+	</items>
+
+	<items page="register/default">
+		<item id="agreement">Agreement</item>
+		<item id="userIdRequired">请填写E'mail</item>
+		<item id="userIdWrong">您填写的E'mail地址格式不正确</item>
+		<item id="userIdRegisted">抱歉，这个E'mail地址已经被注册</item>
+		<item id="passwordRequired">请填写一个密码</item>
+		<item id="passwordShort">太短了</item>
+		<item id="passwordLong">太长了</item>
+		<item id="rePasswordRequired">请填写重复密码</item>
+		<item id="rePasswordNotMatch">输入错误</item>
+		<item id="nicknameRequired">请填写昵称</item>
+		<item id="nicknameShort">太短了</item>
+		<item id="nicknameLong">太长了</item>
+		<item id="secQuestionRequired">请填写提示问题</item>
+		<item id="secQuestionShort">太短了</item>
+		<item id="secQuestionLong">太长了</item>
+		<item id="secAnswerRequired">请填写问题答案</item>
+		<item id="secAnswerShort">太短了</item>
+		<item id="secAnswerLong">太长了</item>
+		<item id="secCodeRequired">请填写验证码</item>
+		<item id="secCodeWrong">请填写正确的验证码</item>
+		<item id="registed">您已成功注册。</item>
+	</items>
+
+	<items page="login/default">
+		<item id="userIdRequired">请填写您的Email</item>
+		<item id="userIdEmpty">您填写的Email不存在</item>
+		<item id="passwordRequired">请填写您的密码</item>
+		<item id="passwordWrong">密码错误</item>
+		<item id="rePasswordRequired">请填写重复密码</item>
+		<item id="rePasswordNotMatch">输入错误</item>
+		<item id="loggedIn">您已成功登入。</item>
+		<item id="alreadyLoggedIn">您已登录，请不要重复登录。</item>
+	</items>
+
+	<items page="logout/default">
+		<item id="loggedOut">登出成功。</item>
+		<item id="notLoggedIn">您还未登录。</item>
+	</items>
+
+	<items page="admin/default">
+		<item id="cacheReloaded">缓存已刷新</item>
+		<item id="cacheBuilt">缓存文件已重建</item>
+	</items>
+
+	<items page="admin/setting/default">
+		<item id="submited">提交成功。</item>
+	</items>
+
+	<items page="admin/user/default">
+
+	</items>
+
+	<items page="admin/category/default">
+		<item id="nameRequired">请填写分类名称</item>
+		<item id="parentIdRequired">请选择分类</item>
+		<item id="categorySaved">添加分类成功</item>
+		<item id="categoryUpdated">编辑成功</item>
+		<item id="categoryDeleted">删除成功</item>
+		<item id="categoryUped">已上移。</item>
+		<item id="categoryDowned">已下移。</item>
+		<item id="categoryAlreadyTop">已经在顶端，无法上移。</item>
+		<item id="categoryAlreadyBottom">已经在底部，无法下移。</item>
+	</items>
+
+	<items page="admin/visitor/default">
+		<item id="cleaned">已清空</item>
+	</items>
+
+	<items page="admin/usergroup/default">
+		<item id="nameRequired">请填写用户组名称</item>
+		<item id="updated">已更新</item>
+	</items>
+
+</languages>

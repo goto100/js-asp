@@ -1,0 +1,38 @@
+/* Global */
+html {
+	margin:0;
+	background-color:#666;
+}
+body {
+	margin:0;
+	padding:0;
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-size:10.5pt;
+}
+body * {
+	margin:0 auto;
+	padding:0;
+}
+a {
+	color:#09f;
+	text-decoration:none;
+}
+a:hover {
+	color:#f90;
+	text-decoration:underline;
+}
+
+/* Layout */
+#wrapper {
+}
+#innerWrapper {
+	width:780px;
+}
+div.clear {
+	border-top:1px solid transparent !important;
+	margin-top:-1px !important;
+	border-top:0;
+	margin-top:0;
+	clear:both;
+	visibility:hidden;
+}

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<languages>
+	<global>
+		<lang name="on">开</lang>
+		<lang name="off">关</lang>
+		<lang name="yes">是</lang>
+		<lang name="no">否</lang>
+		<lang name="view">查看</lang>
+		<lang name="add">添加</lang>
+		<lang name="post">发布</lang>
+		<lang name="edit">编辑</lang>
+		<lang name="delete">删除</lang>
+		<lang name="search">搜索</lang>
+		<lang name="upload">上传</lang>
+		<lang name="comment">评论</lang>
+		<lang name="none">无</lang>
+		<lang name="self">自己</lang>
+		<lang name="all">全部</lang>
+		<lang name="enabled">可用</lang>
+		<lang name="disabled">禁用</lang>
+		<lang name="normal">普通</lang>
+		<lang name="default">默认</lang>
+		<lang name="list">列表</lang>
+		<lang name="incomplete">未填写</lang>
+		<lang name="unselected">未选择</lang>
+		<lang name="add_success">添加成功</lang>
+		<lang name="delete_success">删除成功</lang>
+		<lang name="edit_success">编辑成功</lang>
+		<lang name="admin">管理员</lang>
+		<lang name="main">首页</lang>
+		<lang name="site_manage">网站管理</lang>
+		<lang name="submit_success">提交成功</lang>
+		<lang name="submit_success_desc">您的表单已经提交成功</lang>
+		<lang name="error">错误</lang>
+		<lang name="error_type">错误类型</lang>
+		<lang name="error_num">错误序号</lang>
+		<lang name="error_desc">错误信息</lang>
+		<lang name="unknow_error_desc">发生未知错误，请联系管理员</lang>
+		<lang name="click_to_go_back">点击这里返回</lang>
+		<lang name="admin">管理员</lang>
+		<lang name="no_right">权限不足</lang>
+		<lang name="no_right_desc">您没有执行此操作的权限</lang>
+		<lang name="submit_failure">提交失败</lang>
+		<lang name="form_incomplete_desc">您的表单未填写完整</lang>
+		<lang name="submit">提交</lang>
+		<lang name="reset">重置</lang>
+		<lang name="root_category">根类</lang>
+		<lang name="category">分类</lang>
+		<lang name="unknown">未知</lang>
+		<lang name="bad_request">非法请求</lang>
+		<lang name="submit_edit">提交修改</lang>
+		<lang name="delete">删除</lang>
+		<lang name="title">标题</lang>
+		<lang name="post_date">发表日期</lang>
+		<lang name="in_category">所属分类</lang>
+		<lang name="floder_created">文件夹已建立</lang>
+		<lang name="note">注意</lang>
+		<lang name="tip">提示</lang>
+		<lang name="message">消息</lang>
+		<lang name="confirm_to_delete_desc">您确定要删除吗？</lang>
+	</global>
+	<login.asp>
+		<lang name="welcome">欢迎</lang>
+		<lang name="not_logged_in">您还未登陆</lang>
+		<lang name="login">登陆</lang>
+		<lang name="logout">登出</lang>
+		<lang name="register">注册</lang>
+		<lang name="cookie_option">Cookie 选项</lang>
+		<lang name="save_one_year">保存1年</lang>
+		<lang name="save_one_month">保存1个月</lang>
+		<lang name="save_one_day">保存1天</lang>
+		<lang name="no_save">不保存</lang>
+		<lang name="no_user">不存在此用户</lang>
+		<lang name="login_success_desc">您已成功登陆，请返回</lang>
+		<lang name="logout_success">登出成功</lang>
+		<lang name="logout_success_desc">您已成功登出，请返回</lang>
+		<lang name="already_logged_in_desc">您已经登陆，请登出后再登陆</lang>
+		<lang name="not_logged_in_desc">您还未登录，不可以登出</lang>
+		<lang name="password_error">密码错误</lang>
+		<lang name="username">用户名</lang>
+		<lang name="password">密码</lang>
+		<lang name="cookie_time">Cookie Time</lang>
+		<lang name="security_code_wrong">您输入的验证码错误</lang>
+		<lang name="input_desc">请输入用户名与密码</lang>
+		<lang name="register_new_account">注册新用户</lang>
+		<lang name="cookie_option_desc">在选择时间范围内访问本站无需登陆。</lang>
+		<lang name="security_code">验证码</lang>
+		<lang name="security_code_desc">防止服务器遭受攻击。</lang>
+	</login.asp>
+	<register.asp>
+		<lang name="register_agreement">注册协议</lang>
+		<lang name="accept">接受</lang>
+		<lang name="basic_profile">基本资料</lang>
+		<lang name="advanced_profile">高级资料</lang>
+		<lang name="confirm_password">确认密码</lang>
+	</register.asp>
+	<user.asp>
+		<lang name="no_user_list">没有用户</lang>
+		<lang name="user_profile">用户资料</lang>
+		<lang name="user_group">用户组</lang>
+		<lang name="select_user_group">请选择用户组</lang>
+		<lang name="gender">性别</lang>
+		<lang name="email">Email</lang>
+		<lang name="website">网站</lang>
+		<lang name="secret">保密</lang>
+		<lang name="male">男</lang>
+		<lang name="female">女</lang>
+		<lang name="new_password">新密码</lang>
+		<lang name="confirm">确认</lang>
+		<lang name="two_password_diffirent">您输入的两次新密码不同</lang>
+		<lang name="password_changed">密码已更改</lang>
+		<lang name="manager_edit_profile_desc">您是管理员，在没有用户密码的情况下您只可更改用户所在用户组。</lang>
+		<lang name="edit_profile_desc">修改资料必须填入密码。</lang>
+	</user.asp>
+	<plugin>
+		<lang name="news">新闻</lang>
+		<lang name="music">音乐</lang>
+		<lang name="forum">论坛</lang>
+	</plugin>
+</languages>
