@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<siteName>ScWOS</siteName>
+	<defaultLang>zh-cn</defaultLang>
+	<defaultSkin>default</defaultSkin>
+	<defaultStyle>default</defaultStyle>
+	<memberLoginSecCode>true</memberLoginSecCode>
+	<memberPasswordMaxLength>20</memberPasswordMaxLength>
+	<memberPasswordMinLength>6</memberPasswordMinLength>
+	<memberNicknameMinLength>2</memberNicknameMinLength>
+	<memberNicknameMaxLength>8</memberNicknameMaxLength>
+	<memberRegisterSecCode>true</memberRegisterSecCode>
+	<memberSecQuestionMaxLength>48</memberSecQuestionMaxLength>
+	<memberSecQuestionMinLength>2</memberSecQuestionMinLength>
+	<memberSecAnswerMaxLength>48</memberSecAnswerMaxLength>
+	<memberSecAnswerMinLength>2</memberSecAnswerMinLength>
+	<siteOpened>true</siteOpened>
+	<siteURL>http://localhost/</siteURL>
+</config>

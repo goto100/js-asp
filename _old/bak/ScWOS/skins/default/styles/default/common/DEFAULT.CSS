@@ -1,0 +1,305 @@
+@import url("common.css");
+
+#Header {
+	margin:10px auto;
+	padding:5px;
+	background-color:#eee;
+	border:1px solid #ccc;
+}
+#Navbar {
+	border-top:1px solid #ccc;
+}
+#Navbar li {
+	display:inline;
+	padding:2px;
+}
+h1 {
+	font-size:12pt;
+}
+#UserInfo {
+	float:right;
+	margin-top:-20px;
+}
+#ContentWrapper {
+	padding:5px 0;
+	overflow:auto;
+}
+#Content {
+	width:640px;
+	float:left;
+	line-height:1.5em;
+	background-color:#fff;
+}
+#Sidebar {
+	width:120px;
+	height:100px;
+	float:right;
+	background-color:#eee;
+}
+#Footer {
+	clear:both;
+	margin:10px auto;
+	padding:5px;
+	background-color:#eee;
+	border:1px solid #ccc;
+}
+#Content #msg {
+	padding:2px;
+	font-weight:bold;
+	text-align:center;
+	background-color:#a00
+}
+#Content h2 {
+	padding:3px;
+	font-size:18px;
+	color:#fff;
+	background-color:#333;
+	border-left:8px solid #f90;
+}
+#Content ul
+, #Content ol
+, #Content dl {
+	margin:0.5em;
+	margin-left:4em;
+}
+#Content dl.list dt {
+	display:block;
+	clear:left;
+	float:left;
+	width:18%;
+	margin-right:2%;
+	text-align:right;
+}
+#Content dl.list dd {
+	float:right;
+	width:80%;
+}
+#Content p.note {
+	text-indent:2em;
+}
+#Content strong.important {
+	margin:0 0.2em;
+	color:#f30;
+}
+#Content fieldset {
+	padding:10px;
+	border:1px solid #f90;
+}
+#Content legend {
+	padding:5px;
+	font-weight:bolder;
+}
+#Content label {
+	float:left;
+	width:28%;
+	margin-right:2%;
+	text-align:right;
+}
+#Content div.formItem {
+	margin:10px;
+}
+#Content form div.secCode {
+	margin:5px auto auto 30%;
+}
+#Content form p.description {
+	display:block;
+	margin-left:30%;
+	color:#999;
+	font-size:9pt;
+}
+#Content form p.alert {
+	display:block;
+	margin-left:30%;
+	color:#f30;
+	font-size:9pt;
+}
+#Content form textarea {
+	width:68%;
+}
+#Content form input[type='checkbox'] {
+	margin:0 5px;
+}
+#Content input.reset {
+	float:right;
+	padding:8px 5px;
+}
+#Content input.submit {
+	float:right;
+	padding:8px 20px;
+	font-weight:bolder;
+}
+#Content table.list {
+	width:100%;
+	border-collapse:collapse;
+}
+#Content table.list table.list {
+	width:85%;
+	border-left:1px solid #999;
+}
+#Content table.list thead, #Content table.list tfoot {
+	background-color:#ddd;
+}
+#Content table.list thead th, #Content table.list tfoot td {
+	padding:5px;
+}
+#Content table.list tr.row1 {
+	background-color:#eee;
+}
+#Content table.list tr.row2 {
+	background-color:#fff;
+}
+#Content table.list tr:hover {
+	background-color:#cfc;
+}
+#Content div.pagebar {
+	position:relative;
+	height:34px;
+	background:url("../images/pagebar.png") repeat-x top left;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+#Content div.pagebar ul {
+	margin:0;
+}
+#Content div.pagebar li {
+	float:left;
+	display:inline;
+	list-style-type:none;
+	text-align:center;
+	font-weight:bolder;
+	line-height:30px;
+}
+#Content div.pagebar li.current {
+	margin:2px 2px;
+	width:24px;
+	height:30px;
+	color:#f90;
+	background:url("../images/pagebar-item.png") no-repeat left -30px;
+}
+#Content div.pagebar li.item a, #Content div.pagebar li.first a, #Content div.pagebar li.last a {
+	display:block;
+	margin:2px 2px;
+	width:24px;
+	height:30px;
+	color:#2c2;
+}
+#Content div.pagebar li.item a:hover, #Content div.pagebar li.first a:hover, #Content div.pagebar li.last a:hover {
+	text-decoration:none;
+	background:url("../images/pagebar-item.png") no-repeat left top;
+}
+#Content div.pagebar li.item a:active, #Content div.pagebar li.first a:active, #Content div.pagebar li.last a:active {
+	text-decoration:none;
+	background:url("../images/pagebar-item.png") no-repeat left -30px;
+}
+#Content div.pagebar li.first a, #Content div.pagebar li.last a {
+	font-size:9pt;
+}
+#Content div.pagebar p.previous {
+	display:block;
+	float:left;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-previous.png") no-repeat left top;
+}
+#Content div.pagebar p.previous a {
+	display:block;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-previous.png") no-repeat left -34px;
+}
+#Content div.pagebar p.previous a:hover {
+	background:url("../images/pagebar-previous.png") no-repeat left -68px;
+}
+#Content div.pagebar p.previous a:active {
+	background:url("../images/pagebar-previous.png") no-repeat left -102px;
+}
+#Content div.pagebar p.next {
+	display:block;
+	float:left;
+	margin-right:10px;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-next.png") no-repeat left top;
+}
+#Content div.pagebar p.next a {
+	display:block;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-next.png") no-repeat left -34px;
+}
+#Content div.pagebar p.next a:hover {
+	background:url("../images/pagebar-next.png") no-repeat left -68px;
+}
+#Content div.pagebar p.next a:active {
+	background:url("../images/pagebar-next.png") no-repeat left -102px;
+}
+#Content div.pagebar p.input {
+	position:absolute;
+	top:5px;
+	right:60px;
+}
+#Content div.pagebar p.total {
+	margin:5px 5px 0 0;
+	float:right;
+	font-size:9pt;
+	color:#666;
+}
+
+#Content div.controlbar {
+	height:34px;
+	background:url("../images/pagebar.png") repeat-x top left;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+#Content div.controlbar p.previous {
+	display:block;
+	float:left;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-previous.png") no-repeat left top;
+}
+#Content div.controlbar p.previous a {
+	display:block;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-previous.png") no-repeat left -34px;
+}
+#Content div.controlbar p.previous a:hover {
+	background:url("../images/pagebar-previous.png") no-repeat left -68px;
+}
+#Content div.controlbar p.previous a:active {
+	background:url("../images/pagebar-previous.png") no-repeat left -102px;
+}
+#Content div.controlbar p.next {
+	display:block;
+	float:left;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-next.png") no-repeat left top;
+}
+#Content div.controlbar p.next a {
+	display:block;
+	width:34px;
+	height:34px;
+	text-indent:-9999px;
+	background:url("../images/pagebar-next.png") no-repeat left -34px;
+}
+#Content div.controlbar p.next a:hover {
+	background:url("../images/pagebar-next.png") no-repeat left -68px;
+}
+#Content div.controlbar p.next a:active {
+	background:url("../images/pagebar-next.png") no-repeat left -102px;
+}
+
+div.text {
+	background-color:#fff;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+div.text p {
+	text-indent:2em;
+}

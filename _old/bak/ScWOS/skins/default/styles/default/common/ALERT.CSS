@@ -1,0 +1,24 @@
+@import url("common.css");
+
+#msg {
+	margin:200px auto;
+	padding:10px;
+	border:1px solid #ccc;
+}
+#msg.error h1 {
+	padding:5px;
+	font-size:18px;
+	background-color:#900;
+	color:#fff;
+}
+#msg.success h1 {
+	padding:5px;
+	font-size:18px;
+	background-color:#f90;
+	color:#fff;
+}
+#msg p {
+	margin:20px;
+	font-size:18px;
+	text-align:center;
+}

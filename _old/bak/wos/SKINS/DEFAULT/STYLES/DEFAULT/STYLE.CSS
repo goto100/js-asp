@@ -1,0 +1,285 @@
+/*
+CSS Style - style.css
+
+Last Modify: 2005/06/05
+Author: ScYui
+*/
+#mask {
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:200;
+	filter:alpha(opacity=40);
+	/* this hack is so it works in IE
+	 * I find setting the color in the css gives me more flexibility 
+	 * than the PNG solution.
+	 */
+	background-color:transparent !important;
+	background-color:#333;
+	/* this hack is for opera support
+	 * you can uncomment the background-image if you don't care about opera.
+	 * this gives you the flexibility to use any bg color that you want, instead of the png
+	 */
+	background-image/**/:url("images/maskBG.png") !important; 
+	background-image:none;
+	background-repeat:repeat;
+	display:block;
+}
+#popWin {
+	z-index:300;
+	background-color:#fff;
+}
+#popWin h2 {
+	height:20px;
+	background-color:#f90;
+}
+#msg {
+	text-align:center;
+	font-weight:bolder;
+	background:url("images/msg.gif") no-repeat center center;
+	margin:5px 0;
+}
+html {
+}
+body {
+	margin:0 auto;
+	padding:0;
+	background-color:#09f;
+	font-size:2ex!important;
+	font-size:1.3ex;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+body * {
+	margin:0 auto;
+}
+ul, ol, li, h1, h2, h3, h4, h5, h6, input, textarea, table, thead, tfoot, tbody, tr, th, td{
+	margin:0 auto;
+}
+img {
+	border-width:0;
+}
+table {
+	border-collapse:collapse;
+}
+
+#wrapper {
+	text-align:center;
+	background-color:#09f;
+}
+#innerWrapper {
+	width:770px;
+	text-align:left;
+	background-color:#fff;
+}
+#header {
+	padding:1%;
+	background-color:#09f;
+}
+#header h1,
+#header h1 a {
+	margin:0;
+	padding:0;
+	font-size:12px;
+	line-height:2ex;
+	color:#fff;
+}
+#nav {
+	background-color:#f90;
+	border-top:5px solid #666;
+	font-size:12px;
+	color:#fff;
+}
+	#nav li {
+		display:inline;
+	}
+	#nav a {
+		color:#fff;
+	}
+#footer {
+	clear:both;
+	padding:1%;
+	background-color:#f90;
+}
+	#siteInfo {
+		float:right;
+	}
+	#siteInfo li {
+		display:inline;
+	}
+	#serverInfo {
+	}
+#runtimetest {
+	clear:both;
+}
+	#runtimetest table {
+		width:100%;
+	}
+#debugDatabase {
+	font-size:12px;
+}
+
+#mainWrapper {
+	font-size:12px;
+	background-color:#fdfdfd;
+}
+
+#main {
+	float:left;
+	width:560px;
+	padding:5px;
+	font-size:13px;
+}
+#main.fullWidth {
+	width:98%;
+}
+
+#sidebar {
+	float:right;
+	width:200px;
+	padding:10px 0;
+}
+.clear {
+	border-top:1px solid transparent !important;
+	margin-top:-1px !important;
+	border-top:0;
+	margin-top:0;
+	clear:both;
+	visibility:hidden;
+}
+
+
+
+
+/* Global */
+#main form label {
+	float:left;
+	width:12em;
+	text-align:right;
+}
+#main input.submit {
+	height:20px;
+	border:1px solid #999;
+	border-left:5px solid #999;
+	padding:2px 8px;
+}
+#main h2 {
+	font-size:14px;
+	color:#fff;
+	background-color:#f90;
+	padding:0.5ex;
+}
+#main p.msg {
+	text-align:center;
+	padding:2px;
+	border:1px solid #ccc;
+}
+#main p.note {
+	margin:1ex;
+	padding:1ex;
+	padding-left:30px;
+	border:1px solid #ccc;
+	background:url(../../../../styles/default/images/note.gif) #eee no-repeat 5px center;
+}
+#main p.tip {
+	margin:1ex;
+	padding:1ex;
+	padding-left:30px;
+	border:1px solid #ccc;
+	background:url(../../../../styles/default/images/tip.gif) #eee no-repeat 5px center;
+}
+#main strong.important {
+	color:#f00;
+}
+#main textarea {
+	overflow:visible;
+}
+#main table {
+	width:97%;
+	margin:1%;
+}
+#main th,
+#main td {
+	padding:1%;
+}
+#main th[scope="row"] {
+	text-align:right;
+}
+#main table.list td {
+	padding:2px 0;
+}
+#main table.form td {
+	padding:2px 0;
+}
+#main div.text p {
+	text-indent:4ex;
+}
+#main tr.msg {
+	text-align:center;
+	background-color:#ddd;
+}
+#main div.text p.english {
+	text-indent:0;
+	margin:2ex;
+}
+#main div.text blockquote {
+	margin:10px;
+	padding:10px;
+	border:1px solid #000;
+}
+#main #alert {
+	width:98%;
+	border:1px solid #f90;
+	text-align:center;
+}
+#main #alert h2 {
+	background-color:#f90;
+	color:#fff;
+	font-size:12px;
+	text-align:left;
+	padding:2px;
+	margin-bottom:5px;
+}
+#main #alert ul {
+	margin:20px;
+}
+#main #alert p.link {
+	background-color:#fa5;
+	padding:5px;
+}
+
+#sidebar .panel {
+	width:180px;
+	background:url(../../../../styles/default/images/panel.gif) no-repeat top center;
+	margin-bottom:10px;
+}
+#sidebar .panel h2 {
+	float:left;
+	height:14px;
+	padding:5px 10px;
+	margin-left:22px!important;
+	margin-left:12px;
+	color:#09f;
+	background-color:#fff;
+	font-size:14px;
+	border-top:1px solid #ddd;
+	border-left:1px solid #ddd;
+	border-right:1px solid #ddd;
+}
+#sidebar .panel ul {
+	clear:both;
+	padding:10px;
+	background-color:#eee;
+	border-right:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	border-left:1px solid #ddd;
+	list-style-type:none;
+}
+#sidebar .panel li a {
+	color:#999;
+	line-height:3ex;
+	padding-left:16px;
+	background:url(../../../../styles/default/images/panel_item.png) no-repeat left center;
+}
+#sidebar .panel li a:hover {
+	color:#f90;
+}

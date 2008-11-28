@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<languages>
+	<items page="common">
+		<item id="noPermission">您没有执行此操作的权限</item>
+		<item id="badURL">错误的访问</item>
+		<item id="siteClosed">网站已关闭，请稍候访问。</item>
+	</items>
+
+	<items page="article/default">
+
+	</items>
+
+</languages>
