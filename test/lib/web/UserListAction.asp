@@ -12,5 +12,18 @@ UserListAction.prototype.action = function() {
 		writeln(user.username);
 	});
 
+write(this.request.method);
+form();
+
 }
 </script>
+<%
+function form() {
+%>
+<form method="post" action="index.asp">
+	<input type="submit" />
+	<input type="hidden" name="__method__" value="delete" />
+</form>
+<%
+}
+%>
