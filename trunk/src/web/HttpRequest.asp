@@ -119,9 +119,9 @@ function HttpRequest() {
 	// Request.QueryString
 	function getSearch() {
 		var queryString = String(Request.QueryString);
-		var path = queryString.substr(0, queryString.indexOf("?")).split("/");
-		var search = queryString.substr(queryString.indexOf("?") + 1).split("&");
-		search.unshift(path);
+		var search = queryString.split("&");
+		if (search[0].indexOf("=") == -1) search[0] = search[0].split("/");
+		else search.unshift(null);
 		for (var i = 1/* Ignore path */; i < search.length; i++) {
 			search[i] = new String(search[i]);
 			search[i].name = search[i].substr(0, search[i].indexOf("="));

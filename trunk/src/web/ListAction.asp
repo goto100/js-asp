@@ -1,4 +1,3 @@
-<!--#include file="Action.asp" -->
 <script language="javascript" runat="server">
 function ListAction() {
 	this.pageSize;
