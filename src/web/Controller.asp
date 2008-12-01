@@ -1,12 +1,19 @@
 <!--#include file="UploaderFile.asp" -->
 <!--#include file="HttpRequest.asp" -->
+<!--#include file="Action.asp" -->
+<!--#include file="FormAction.asp" -->
+<!--#include file="SubmissionAction.asp" -->
+<!--#include file="ListAction.asp" -->
 <script language="javascript" runat="server">
 function Controller() {
 	this.request = new HttpRequest();
 	this.ActivedAction;
 }
+
 Controller.prototype.addActionClass = function(ActionClass, actived) {
-	if (actived === true || this.request.search[0].contains(actived)) this.ActivedAction = ActionClass;
+	if (actived === true || this.dispatch(ActionClass)) {
+		this.ActivedAction = ActionClass;
+	}
 }
 
 Controller.prototype.execute = function() {
@@ -16,4 +23,11 @@ Controller.prototype.execute = function() {
 		action.execute();
 	}
 }
+
+Controller.prototype.dispatch = function(ActionClass) {
+	if (instanceOf(ActionClass.prototype, ListAction)) return true;
+	if (instanceOf(ActionClass.prototype, FormAction) && ["add", "new", "post", "create", "edit", "modify"].contains(this.request.search[0][this.request.search[0].length - 1])) return true;
+	return false;
+}
+
 </script>
