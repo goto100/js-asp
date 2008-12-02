@@ -12,8 +12,13 @@ UserListAction.prototype.action = function() {
 		writeln(user.username);
 	});
 
-form();
-
+	form();
+	if (this.input["file"]) for(var i = 0; i < this.input["file"].length; i++) {
+		writeln(this.input["file"][i].name)
+		writeln(this.input["file"][i].contentType)
+		writeln(this.input["file"][i].size)
+		this.input["file"][i].save(Server.MapPath("/js-asp/img/" + this.input["file"][i].name))
+	}
 }
 
 
@@ -33,7 +38,14 @@ EditUserAction.prototype.action = function() {
 <%
 function form() {
 %>
-<form method="post" action="index.asp">
+<form method="post" action="index.asp" enctype="multipart/form-data">
+	<input name="file" type="file" />
+	<input name="file" type="file" />
+	<input name="file" type="file" />
+	<input name="file" type="file" />
+	<input name="file" type="file" />
+	<input name="file" type="file" />
+	<input name="file" type="file" />
 	<button name="delete" value="index.asp?1/1">É¾³ý</button>
 	<input type="submit" />
 	<input type="hidden" name="__method__" value="delete" />
