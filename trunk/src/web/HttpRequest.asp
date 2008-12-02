@@ -12,17 +12,16 @@ end function
 </script>
 <script language="javascript" runat="server">
 function HttpRequest() {
-	this.method = getMethod();
 	this.search = getSearch();
 	this.input = getInput();
+
+	this.method = this.input["__method__"]? this.input["__method__"].toUpperCase() : "GET";
+	if (!["GET", "POST", "PUT", "DELETE", "HEAD"].contains(this.method)) {
+		this.method = Request.ServerVariables("REQUEST_METHOD");
+	}
+
 	this.path = String(Request.ServerVariables("PATH_INFO"));
 	this._ip;
-
-	function getMethod() {
-		var method = String(Request.Form("__method__")).toUpperCase();
-		if (["GET", "POST", "PUT", "DELETE", "HEAD"].contains(method)) return method;
-		return Request.ServerVariables("REQUEST_METHOD");
-	}
 
 	// Request.Form
 	function getInput() {
@@ -61,7 +60,7 @@ function HttpRequest() {
 		var separator = vbs_midB(requestData, 1, vbs_inStrB(1, requestData, vbs_crlf, 0) - 1); // First line
 		var separatorLength = vbs_lenB(separator);
 
-		formStart += separatorLength + 1; // Begin at next line, start to get informations!
+		formStart += separatorLength + 1; // Begin at next line, start get data!
 		var infoEnd = 0;
 		var stream = new ActiveXObject("ADODB.Stream");
 		while (formStart + 10 < formEnd) {
