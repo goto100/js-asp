@@ -38,7 +38,40 @@ EditUserAction.prototype.action = function() {
 <%
 function form() {
 %>
-<form method="post" action="index.asp" enctype="multipart/form-data">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="base2-dom-fp.js"></script>
+<script type="text/javascript">
+base2.JavaScript.bind(window);
+base2.DOM.bind(document);
+base2.DOM.EventTarget(window);
+
+
+function DisplayProgressBar() {
+	var div = document.getElementById("progress");
+	var xmlPath = "/js-asp/img/upload.xml";
+    var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("GET", xmlPath, false);
+	xmlHttp.send(null);
+	var xml = xmlHttp.responseXML;
+
+	var read = xml.documentElement.getAttribute("read");
+	var total = xml.documentElement.getAttribute("total");
+	div.innerHTML = read + "/" + total + "=" + Math.floor(read * 100 / total) + "%";
+
+	setTimeout(DisplayProgressBar, 1000);
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+	var form = document.getElementById("form").elements["submit"].onclick = function() {
+		var div = document.createElement("div");
+		div.setAttribute("id", "progress");
+		document.documentElement.appendChild(div);
+		DisplayProgressBar();
+	}
+}, false);
+</script>
+<form id="form" method="post" action="index.asp" enctype="multipart/form-data">
 	<input name="file" type="file" />
 	<input name="file" type="file" />
 	<input name="file" type="file" />
@@ -46,8 +79,8 @@ function form() {
 	<input name="file" type="file" />
 	<input name="file" type="file" />
 	<input name="file" type="file" />
-	<button name="delete" value="index.asp?1/1">É¾³ý</button>
-	<input type="submit" />
+	<button name="delete" value="index.asp?1/1">åˆ é™¤</button>
+	<input name="submit" type="submit" />
 	<input type="hidden" name="__method__" value="delete" />
 </form>
 <%
