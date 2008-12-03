@@ -1,5 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<%
+<script language="vbscript" runat="server">
 Dim SundyUpload_SourceData
 Class SundyUpload
   Dim objForm,objFile,Version,objProgress
@@ -320,7 +320,12 @@ Class Progress
       Set objDom = Nothing
     End Sub
 End Class
-%>
+</script>
+
+
+
+
+
 <script language="javascript">
 //启动进度条
 function startProgress(xmlPath){

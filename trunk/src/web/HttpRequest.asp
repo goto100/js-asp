@@ -39,18 +39,35 @@ function HttpRequest() {
 		return input;
 	}
 
+	var dom;
+	var xmlPath;
+	var startTime;
+
 	// Request with multipart/form-data
 	function getDataInput() {
 		if (Request.TotalBytes < 1) return false;
 		var charset = String(Request.ServerVariables("HTTP_ACCEPT_CHARSET"));
-		charset = charset.substr(0, charset.indexOf(","));
-		if (!charset) charset = "UTF-8";
+		// charset = charset.substr(0, charset.indexOf(","));
+		charset = "UTF-8";
 		var input = {}
 		var dataStream = new ActiveXObject("ADODB.Stream");
 		dataStream.Type = 1;
 		dataStream.Mode = 3;
 		dataStream.Open();
-		dataStream.Write(Request.BinaryRead(Request.TotalBytes));
+		var now = new Date();
+		var totalSize = Request.TotalBytes;
+		var blockSize = Math.round(totalSize / 100);
+		if (blockSize < 65536) blockSize = 65536; // 64kB
+		var readSize = 0;
+		var data;
+		outputProgress(readSize, totalSize);
+		while(readSize < totalSize) {
+			if (readSize + blockSize > totalSize) blockSize = totalSize - readSize;
+			data = Request.BinaryRead(blockSize);
+			readSize += blockSize;
+			dataStream.Write(data);
+			outputProgress(readSize, totalSize);
+		}
 		dataStream.Position = 0;
 		var requestData = dataStream.Read();
 		var formStart = 1;
@@ -113,6 +130,31 @@ function HttpRequest() {
 		delete requestData;
 		delete stream;
 		return input;
+	}
+
+	function outputProgress(readSize, totalSize) {
+		if (readSize == 0) {
+			startTime = new Date();
+			//xmlPath = Server.MapPath("/js-asp/img/" + Session.SessionID + "-" + new Date().valueOf() + ".xml");
+			xmlPath = Server.MapPath("/js-asp/img/upload.xml");
+			dom = Server.CreateObject("Microsoft.XMLDOM");
+			var root = dom.createElement("upload");
+			root.setAttribute("read", 0);
+			root.setAttribute("total", totalSize);
+			dom.documentElement = root;
+			dom.insertBefore(dom.createProcessingInstruction("xml","version='1.0' encoding='utf-8'"), dom.documentElement);
+			dom.save(xmlPath)
+		} else {
+			dom.selectSingleNode("/upload/@read").text = readSize;
+			dom.selectSingleNode("/upload/@total").text = totalSize;
+			dom.save(xmlPath);
+			if (readSize == totalSize && false) {
+				var fso = Server.CreateObject("Scripting.FileSystemObject");
+				if (fso.FileExists(xmlPath)) fso.DeleteFile(xmlPath);
+				delete fso;
+				delete dom;
+			}
+		}
 	}
 
 	// Request.QueryString
