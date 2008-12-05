@@ -12,6 +12,10 @@ end function
 </script>
 <script language="javascript" runat="server">
 function HttpRequest() {
+	// var filePath = Server.MapPath("/js-asp/img/" + Session.SessionID + "-" + new Date().valueOf() + ".xml");
+	var filePath = Server.MapPath("/js-asp/img/upload.xml");
+	var fso = Server.CreateObject("Scripting.FileSystemObject");
+
 	this.search = getSearch();
 	this.input = getInput();
 
@@ -39,10 +43,6 @@ function HttpRequest() {
 		return input;
 	}
 
-	var dom;
-	var xmlPath;
-	var startTime;
-
 	// Request with multipart/form-data
 	function getDataInput() {
 		if (Request.TotalBytes < 1) return false;
@@ -56,7 +56,7 @@ function HttpRequest() {
 		dataStream.Open();
 		var now = new Date();
 		var totalSize = Request.TotalBytes;
-		var blockSize = Math.round(totalSize / 100);
+		var blockSize = Math.round(totalSize / 1000);
 		if (blockSize < 65536) blockSize = 65536; // 64kB
 		var readSize = 0;
 		var data;
@@ -133,27 +133,13 @@ function HttpRequest() {
 	}
 
 	function outputProgress(readSize, totalSize) {
-		if (readSize == 0) {
-			startTime = new Date();
-			//xmlPath = Server.MapPath("/js-asp/img/" + Session.SessionID + "-" + new Date().valueOf() + ".xml");
-			xmlPath = Server.MapPath("/js-asp/img/upload.xml");
-			dom = Server.CreateObject("Microsoft.XMLDOM");
-			var root = dom.createElement("upload");
-			root.setAttribute("read", 0);
-			root.setAttribute("total", totalSize);
-			dom.documentElement = root;
-			dom.insertBefore(dom.createProcessingInstruction("xml","version='1.0' encoding='utf-8'"), dom.documentElement);
-			dom.save(xmlPath)
-		} else {
-			dom.selectSingleNode("/upload/@read").text = readSize;
-			dom.selectSingleNode("/upload/@total").text = totalSize;
-			dom.save(xmlPath);
-			if (readSize == totalSize && false) {
-				var fso = Server.CreateObject("Scripting.FileSystemObject");
-				if (fso.FileExists(xmlPath)) fso.DeleteFile(xmlPath);
-				delete fso;
-				delete dom;
-			}
+		var file = fso.CreateTextFile(filePath, true);
+		file.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+		file.WriteLine("<upload read=\"" + readSize + "\" total=\"" + totalSize + "\" />");
+		file.Close();
+		if (readSize == totalSize && false) {
+			if (fso.FileExists(filePath)) fso.DeleteFile(filePath);
+			delete fso;
 		}
 	}
 

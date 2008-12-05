@@ -11,10 +11,4 @@ Site.prototype.load = function() {
 	this.db.open();
 }
 
-Site.prototype.getUserDao = function() {
-	var dao = new UserDao();
-	dao.db = this.db;
-	return dao;
-}
-
 </script>

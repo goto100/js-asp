@@ -341,7 +341,7 @@ function DisplayProgressBar(xmlPath){
     if (xmlDoc.parseError.errorCode!=0){
         var error = xmlDoc.parseError;
         alert(error.reason)
-        setTimeout("DisplayProgressBar('" + xmlPath + "')",1000);
+        setTimeout("DisplayProgressBar('" + xmlPath + "')",10);
         return;
     }
     var root = xmlDoc.documentElement;   //根节点
@@ -355,7 +355,7 @@ function DisplayProgressBar(xmlPath){
     totalTime.innerHTML = root.childNodes(4).text;
     leftTime.innerHTML = root.childNodes(5).text;
     if (percent<100){
-      setTimeout("DisplayProgressBar('" + xmlPath + "')",1000);
+      setTimeout("DisplayProgressBar('" + xmlPath + "')",10);
     }
 }
 

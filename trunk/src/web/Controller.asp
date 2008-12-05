@@ -26,7 +26,6 @@ Controller.prototype.execute = function() {
 
 Controller.prototype.dispatch = function(ActionClass) {
 	if (instanceOf(ActionClass.prototype, ListAction)) return true;
-	if (instanceOf(ActionClass.prototype, FormAction) && ["add", "new", "post", "create", "edit", "modify"].contains(this.request.search[0][this.request.search[0].length - 1])) return true;
 	return false;
 }
 

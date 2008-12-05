@@ -11,4 +11,11 @@ function write(str) {
 function writeln(str) {
 	Response.Write((str? str : "") + "<br />");
 }
+var test = {};
+test.start = function() {
+	test.now = Date.now();
+}
+test.end = function() {
+	writeln(Date.now() - test.now + "ms");
+}
 </script>
