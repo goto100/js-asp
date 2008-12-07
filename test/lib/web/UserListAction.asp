@@ -6,10 +6,15 @@ UserListAction.prototype = new ListAction();
 UserListAction.prototype.action = function() {
 	form();
 	if (this.input["file"]) for(var i = 0; i < this.input["file"].length; i++) {
+		writeln(this.input["file"][i].path)
 		writeln(this.input["file"][i].name)
 		writeln(this.input["file"][i].contentType)
 		writeln(this.input["file"][i].size)
+		writeln(this.input["text"])
+		writeln(this.input["text2"])
+		;;; test.start();
 		this.input["file"][i].save(Server.MapPath("/js-asp/img/" + this.input["file"][i].name))
+		;;; test.end("Save file: ");
 	}
 }
 
@@ -34,6 +39,12 @@ function form() {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>无标题文档</title>
+<style type="text/css">
+pre {
+	font-size: 9pt;
+	border: 1px dashed #999;
+}
+</style>
 <script type="text/javascript" src="base2-dom-fp.js"></script>
 <script type="text/javascript">
 eval(base2.namespace);
@@ -100,10 +111,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	<input name="file" type="file" />
 	<input name="file" type="file" />
 	<input name="file" type="file" />
-	<input name="file" type="file" />
-	<input name="file" type="file" />
-	<input name="file" type="file" />
-	<input name="file" type="file" />
+	<input name="text" type="text" />
+	<input name="text2" type="text" />
 	<input name="submit" type="submit" />
 	<input type="hidden" name="__method__" value="delete" />
 </form>
