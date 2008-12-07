@@ -1,4 +1,3 @@
-<!--#include file="UploaderFile.asp" -->
 <!--#include file="HttpRequest.asp" -->
 <!--#include file="Action.asp" -->
 <!--#include file="FormAction.asp" -->

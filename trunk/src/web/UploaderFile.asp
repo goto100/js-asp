@@ -13,7 +13,7 @@ function UploaderFile() {
 	}
 
 	this.save = function(path) {
-		var builtStream = new ActiveXObject("ADODB.Stream");
+		var builtStream = Server.CreateObject("ADODB.Stream");
 		builtStream.Type = 1;
 		builtStream.Mode = 3;
 		builtStream.Open();

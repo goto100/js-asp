@@ -25,7 +25,7 @@ DBAccess.getSQLStr = function(value) {
 // Create record set
 DBAccess.prototype.createRecordSet = function() {
 	try {
-		return new ActiveXObject("ADODB.RecordSet");
+		return Server.CreateObject("ADODB.RecordSet");
 	} catch(e) {
 		throw new Error(0, "Can't create DB Recordset, you need ADODB.Recordset object.");
 	}
@@ -43,7 +43,7 @@ DBAccess.prototype.checkSQL = function(str) {
 // Open
 DBAccess.prototype.open = function() {
 	try {
-		this._conn = new ActiveXObject("ADODB.Connection");
+		this._conn = Server.CreateObject("ADODB.Connection");
 	} catch(e) {
 		throw new Error(0, "Can't create DB Connection, you need ADODB.Connection object.");
 	}
