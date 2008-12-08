@@ -1,6 +1,6 @@
 <%@LANGUAGE="JAVASCRIPT" CODEPAGE="65001"%>
 <script language="javascript" runat="server">
-var DEBUG = false;
+var DEBUG = true;
 </script>
 <!--#include file="common.asp"-->
 <!--#include file="lib/web/UserListAction.asp"-->

@@ -9,10 +9,16 @@ function write(str, bin) {
 	bin? Response.BinaryWrite(str) : Response.Write(str);
 }
 function writeln(str, bin) {
+	if (str == undefined) str = "";
 	if (bin) {
-		Response.BinaryWrite((str? str : ""));
+		Response.BinaryWrite(str);
 		Response.Write("<br />");
-	} else Response.Write((str? str : "") + "<br />");
+	} else Response.Write(str + "<br />");
+}
+function writebin(bin) {
+	write("<pre>");
+	Response.BinaryWrite(bin);
+	write("</pre>");
 }
 var test = {};
 test.start = function() {
