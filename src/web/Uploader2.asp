@@ -75,10 +75,11 @@ Uploader2.prototype.getInput = function() {
 		infoEnd = vbs_inStrB(start, data, vbs_crlf + vbs_crlf, 0) + 3;
 		var info = Uploader2.binToString(this.dataStream, this.charset, start, infoEnd - start - 4);
 		start = vbs_inStrB(infoEnd, data, separator, 0);
-
+writeln(info)
+writeln(infoEnd + " has " + (start - infoEnd - 3))
 		var item = this.getForm(info, infoEnd, start - infoEnd - 3);
 
-		if (instanceOf(item.value, Uploader2File)) {
+		if (instanceOf(item.value, UploaderFile)) {
 			if (!input[item.name]) input[item.name] = [];
 			if (item.value.name) input[item.name].push(item.value);
 		} else {
@@ -99,7 +100,7 @@ Uploader2.prototype.getForm = function(info, start, size) {
 
 	this.dataStream.Position = start;
 	if (info.filename != undefined) { // A file
-		var file = new Uploader2File();
+		var file = new UploaderFile();
 		file.path = info.filename;
 		file.name = file.path.substring(file.path.lastIndexOf("\\") + 1);
 		if (info.match(/Content\-Type\: (.+?)$/ig)) file.contentType = RegExp.$1;

@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </head>
 
 <body>
-<form id="form" method="post" action="index.asp" enctype="multipart/form-data">
+<form id="form" method="post" action="<%=DEBUG? "index.asp": "index2.asp"%>" enctype="multipart/form-data">
 	<input name="file" type="file" />
 	<input name="file" type="file" />
 	<input name="file" type="file" />
