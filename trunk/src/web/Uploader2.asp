@@ -1,4 +1,159 @@
 <!--#include file="UploaderFile.asp" -->
+<script language="javascript" runat="server">
+/*
+This is a request data
+********************************************************************
+-----------------------------196291262324084
+Content-Disposition: form-data; name="file"; filename="file.txt"
+Content-Type: text/plain
+
+content
+-----------------------------196291262324084
+Content-Disposition: form-data; name="submit"
+
+submit
+-----------------------------196291262324084
+Content-Disposition: form-data; name="text"
+
+text
+-----------------------------196291262324084--
+********************************************************************
+*/
+
+function Uploader() {
+	this.filePath = Server.MapPath("/js-asp/img/upload.xml");
+	this.fso = Server.CreateObject("Scripting.FileSystemObject");
+	this.dataStream = Server.CreateObject("ADODB.Stream");
+	this.dataStream.Type = 1;
+	this.dataStream.Mode = 3;
+	this.charset = String(Request.ServerVariables("HTTP_ACCEPT_CHARSET"));
+	// this.charset = this.charset.substr(0, this.charset.indexOf(","));
+	this.charset = "UTF-8";
+	this.size = 0;
+	this.block = {size: {min: 1024, max: 65536}};
+	this.outputs = {length: 0};
+}
+
+Uploader.prototype.getInput = function() {
+	if (Request.TotalBytes < 1) return false;
+	var input = {}
+
+	this.dataStream.Open();
+	this.size = Request.TotalBytes;
+	var separator;
+	var separatorLength;
+	var block = {size: Math.round(this.size / 1000)};
+	if (block.size < this.block.size.min) block.size = this.block.size.min;
+	if (block.size > this.block.size.max) block.size = this.block.size.max;
+	var readBlock = {size: 1024, read: 0};
+	var segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+	this.readSize = 0;
+	this.outputProgress();
+	var i = 0;
+
+	while (this.readSize < this.size) {
+		if (this.readSize + block.size > this.size) block.size = this.size - this.readSize;
+		block.data = Request.BinaryRead(block.size);
+		this.dataStream.Write(block.data);
+		this.readSize += block.size;
+		if (i == 0) {
+			separator = vbs_midB(block.data, 1, vbs_inStrB(1, block.data, vbs_crlf, 0) - 1); // First line
+			separatorLength = vbs_lenB(separator);
+		}
+
+		this.outputProgress();
+		i++;
+	}
+	this.dataStream.Position = 0;
+	var data = this.dataStream.Read();
+
+	var start = 1;
+	start += separatorLength + 1; // Begin at next line, start get data!
+
+	var infoEnd = 0;
+	while (start + 3 < this.size) {
+		infoEnd = vbs_inStrB(start, data, vbs_crlf + vbs_crlf, 0) + 3;
+		var info = Uploader.binToString(this.dataStream, this.charset, start, infoEnd - start - 4);
+		start = vbs_inStrB(infoEnd, data, separator, 0);
+
+		var item = this.getForm(info, infoEnd, start - infoEnd - 3);
+
+		if (instanceOf(item.value, UploaderFile)) {
+			if (!input[item.name]) input[item.name] = [];
+			if (item.value.name) input[item.name].push(item.value);
+		} else {
+			if (!input[item.name]) input[item.name] = item.value;
+			else input[item.name] += ", " + item.value;
+		}
+		start += separatorLength + 1;
+	}
+	delete data;
+	return input;
+}
+
+Uploader.prototype.getForm = function(info, start, size) {
+	var item = {}
+	info = new String(info);
+	if (info.match(/ filename\=\"(.*?)\"/ig)) info.filename = RegExp.$1;
+	if (info.match(/ name\=\"(.+?)\"/ig)) item.name = RegExp.$1;
+
+	this.dataStream.Position = start;
+	if (info.filename != undefined) { // A file
+		var file = new UploaderFile();
+		file.path = info.filename;
+		file.name = file.path.substring(file.path.lastIndexOf("\\") + 1);
+		if (info.match(/Content\-Type\: (.+?)$/ig)) file.contentType = RegExp.$1;
+		file.size = size;
+		file.setStreamSource(this.dataStream, start);
+		item.value = file;
+	} else item.value = Uploader.binToString(this.dataStream, this.charset, start, size);
+	return item;
+}
+
+Uploader.prototype.outputProgress = function() {
+	var file = this.fso.CreateTextFile(this.filePath, true);
+	file.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+	file.WriteLine("<upload read=\"" + this.readSize + "\" total=\"" + this.size + "\" count=\"" + this.outputs.length++ + "\" />");
+	file.Close();
+	if (this.readSize == this.size && false) {
+		if (this.fso.FileExists(this.filePath)) this.fso.DeleteFile(this.filePath);
+		delete this.fso;
+	}
+}
+
+Uploader.tempStream = null;
+
+Uploader.getBin = function(source, start, size) {
+	if (!Uploader.tempStream) Uploader.tempStream = Server.CreateObject("ADODB.Stream");
+	var stream = Uploader.tempStream;
+	stream.Type = 1;
+	stream.Mode = 3;
+	stream.Open();
+	source.Position = start;
+	source.CopyTo(stream, size);
+	stream.Position = 0;
+	var bin = stream.Read();
+	stream.Close();
+	return bin;
+}
+
+Uploader.binToString = function(source, charset, start, size) {
+	if (!Uploader.tempStream) Uploader.tempStream = Server.CreateObject("ADODB.Stream");
+	var stream = Uploader.tempStream;
+	stream.Type = 1;
+	stream.Mode = 3;
+	stream.Open();
+	source.Position = start;
+	source.CopyTo(stream, size);
+	stream.Position = 0;
+	stream.Type = 2;
+	stream.Charset = charset;
+	var string = stream.ReadText();
+	stream.Close();
+	return string;
+}
+
+</script>
 <script language="vbscript" runat="server">
 dim vbs_crlf : vbs_crlf = chrB(13) & chrB(10)
 function vbs_inStrB(p1, p2, p3, p4)
@@ -10,109 +165,4 @@ end function
 function vbs_lenB(param)
 	vbs_lenB = LenB(param)
 end function
-</script>
-<script language="javascript" runat="server">
-function Uploader() {
-	this.filePath = Server.MapPath("/js-asp/img/upload.xml");
-	this.fso = Server.CreateObject("Scripting.FileSystemObject");
-}
-
-Uploader.prototype.getInput = function() {
-	if (Request.TotalBytes < 1) return false;
-	var charset = String(Request.ServerVariables("HTTP_ACCEPT_CHARSET"));
-	// charset = charset.substr(0, charset.indexOf(","));
-	charset = "UTF-8";
-	var input = {}
-
-	var dataStream = Server.CreateObject("ADODB.Stream");
-	dataStream.Type = 1;
-	dataStream.Mode = 3;
-	dataStream.Open();
-	var totalSize = Request.TotalBytes;
-	var blockSize = Math.round(totalSize / 1000);
-	if (blockSize < 65536) blockSize = 65536; // 64kB
-	var readSize = 0;
-	var data;
-	this.outputProgress(readSize, totalSize);
-	while(readSize < totalSize) {
-		if (readSize + blockSize > totalSize) blockSize = totalSize - readSize;
-		data = Request.BinaryRead(blockSize);
-		readSize += blockSize;
-		dataStream.Write(data);
-		this.outputProgress(readSize, totalSize);
-	}
-	dataStream.Position = 0;
-	var requestData = dataStream.Read();
-	var formStart = 1;
-	var formEnd = vbs_lenB(requestData);
-
-	// Get separator's length
-	var separator = vbs_midB(requestData, 1, vbs_inStrB(1, requestData, vbs_crlf, 0) - 1); // First line
-	var separatorLength = vbs_lenB(separator);
-	formStart += separatorLength + 1; // Begin at next line, start get data!
-	var infoEnd = 0;
-	var stream = Server.CreateObject("ADODB.Stream");
-	while (formStart + 10 < formEnd) {
-		// Get form name
-		infoEnd = vbs_inStrB(formStart, requestData, vbs_crlf + vbs_crlf, 0) + 3;
-		stream.Type = 1;
-		stream.Mode = 3;
-		stream.Open();
-		dataStream.Position = formStart;
-		dataStream.CopyTo(stream, infoEnd - formStart);
-		stream.Position = 0;
-		stream.Type = 2;
-		stream.Charset = charset;
-		var info = stream.ReadText();
-		stream.Close();
-		formStart = vbs_inStrB(infoEnd, requestData, separator, 0);
-		var findStart = info.indexOf("name=\"", 22) + 6;
-		var findEnd = info.indexOf("\"", findStart);
-		var formName = info.substr(findStart, findEnd - findStart);
-		if (info.indexOf("filename=\"", 41) > 0) { // A file
-			var file = new UploaderFile();
-			file.setStreamSource(dataStream, infoEnd);
-			findStart = info.indexOf("filename=\"", findEnd) + 10;
-			findEnd = info.indexOf("\"", findStart);
-			file.name = info.substr(findStart, findEnd - findStart); // Name
-			findStart = info.indexOf("Content-Type: ", findEnd) + 14;
-			findEnd = info.indexOf("\r", findStart);
-			file.contentType = info.substr(findStart, findEnd - findStart); // Content type
-			file.size = formStart - infoEnd - 3; // Size
-			if (file.name) {
-				if (!input[formName]) input[formName] = [];
-				input[formName].push(file);
-			}
-		} else { // A form item
-			stream.Type = 1;
-			stream.Mode = 3;
-			stream.Open();
-			dataStream.Position = infoEnd; 
-			dataStream.CopyTo(stream, formStart - infoEnd - 3);
-			stream.Position = 0;
-			stream.Type = 2;
-			stream.Charset = charset;
-			var formValue = stream.ReadText();
-			stream.Close();
-			if (!input[formName]) input[formName] = formValue;
-			else input[formName] += ", " + formValue;
-		}
-		formStart = formStart + separatorLength + 1;
-	}
-	delete requestData;
-	delete stream;
-	return input;
-}
-
-Uploader.prototype.outputProgress = function(readSize, totalSize) {
-	var file = this.fso.CreateTextFile(this.filePath, true);
-	file.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-	file.WriteLine("<upload read=\"" + readSize + "\" total=\"" + totalSize + "\" />");
-	file.Close();
-	if (readSize == totalSize && false) {
-		if (this.fso.FileExists(this.filePath)) this.fso.DeleteFile(this.filePath);
-		delete this.fso;
-	}
-}
-
 </script>
