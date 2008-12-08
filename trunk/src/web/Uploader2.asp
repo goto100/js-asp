@@ -20,7 +20,7 @@ text
 ********************************************************************
 */
 
-function Uploader() {
+function Uploader2() {
 	this.filePath = Server.MapPath("/js-asp/img/upload.xml");
 	this.fso = Server.CreateObject("Scripting.FileSystemObject");
 	this.dataStream = Server.CreateObject("ADODB.Stream");
@@ -34,7 +34,7 @@ function Uploader() {
 	this.outputs = {length: 0};
 }
 
-Uploader.prototype.getInput = function() {
+Uploader2.prototype.getInput = function() {
 	if (Request.TotalBytes < 1) return false;
 	var input = {}
 
@@ -73,12 +73,12 @@ Uploader.prototype.getInput = function() {
 	var infoEnd = 0;
 	while (start + 3 < this.size) {
 		infoEnd = vbs_inStrB(start, data, vbs_crlf + vbs_crlf, 0) + 3;
-		var info = Uploader.binToString(this.dataStream, this.charset, start, infoEnd - start - 4);
+		var info = Uploader2.binToString(this.dataStream, this.charset, start, infoEnd - start - 4);
 		start = vbs_inStrB(infoEnd, data, separator, 0);
 
 		var item = this.getForm(info, infoEnd, start - infoEnd - 3);
 
-		if (instanceOf(item.value, UploaderFile)) {
+		if (instanceOf(item.value, Uploader2File)) {
 			if (!input[item.name]) input[item.name] = [];
 			if (item.value.name) input[item.name].push(item.value);
 		} else {
@@ -91,7 +91,7 @@ Uploader.prototype.getInput = function() {
 	return input;
 }
 
-Uploader.prototype.getForm = function(info, start, size) {
+Uploader2.prototype.getForm = function(info, start, size) {
 	var item = {}
 	info = new String(info);
 	if (info.match(/ filename\=\"(.*?)\"/ig)) info.filename = RegExp.$1;
@@ -99,18 +99,18 @@ Uploader.prototype.getForm = function(info, start, size) {
 
 	this.dataStream.Position = start;
 	if (info.filename != undefined) { // A file
-		var file = new UploaderFile();
+		var file = new Uploader2File();
 		file.path = info.filename;
 		file.name = file.path.substring(file.path.lastIndexOf("\\") + 1);
 		if (info.match(/Content\-Type\: (.+?)$/ig)) file.contentType = RegExp.$1;
 		file.size = size;
 		file.setStreamSource(this.dataStream, start);
 		item.value = file;
-	} else item.value = Uploader.binToString(this.dataStream, this.charset, start, size);
+	} else item.value = Uploader2.binToString(this.dataStream, this.charset, start, size);
 	return item;
 }
 
-Uploader.prototype.outputProgress = function() {
+Uploader2.prototype.outputProgress = function() {
 	var file = this.fso.CreateTextFile(this.filePath, true);
 	file.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	file.WriteLine("<upload read=\"" + this.readSize + "\" total=\"" + this.size + "\" count=\"" + this.outputs.length++ + "\" />");
@@ -121,11 +121,11 @@ Uploader.prototype.outputProgress = function() {
 	}
 }
 
-Uploader.tempStream = null;
+Uploader2.tempStream = null;
 
-Uploader.getBin = function(source, start, size) {
-	if (!Uploader.tempStream) Uploader.tempStream = Server.CreateObject("ADODB.Stream");
-	var stream = Uploader.tempStream;
+Uploader2.getBin = function(source, start, size) {
+	if (!Uploader2.tempStream) Uploader2.tempStream = Server.CreateObject("ADODB.Stream");
+	var stream = Uploader2.tempStream;
 	stream.Type = 1;
 	stream.Mode = 3;
 	stream.Open();
@@ -137,9 +137,9 @@ Uploader.getBin = function(source, start, size) {
 	return bin;
 }
 
-Uploader.binToString = function(source, charset, start, size) {
-	if (!Uploader.tempStream) Uploader.tempStream = Server.CreateObject("ADODB.Stream");
-	var stream = Uploader.tempStream;
+Uploader2.binToString = function(source, charset, start, size) {
+	if (!Uploader2.tempStream) Uploader2.tempStream = Server.CreateObject("ADODB.Stream");
+	var stream = Uploader2.tempStream;
 	stream.Type = 1;
 	stream.Mode = 3;
 	stream.Open();
@@ -153,16 +153,4 @@ Uploader.binToString = function(source, charset, start, size) {
 	return string;
 }
 
-</script>
-<script language="vbscript" runat="server">
-dim vbs_crlf : vbs_crlf = chrB(13) & chrB(10)
-function vbs_inStrB(p1, p2, p3, p4)
-	vbs_inStrB = InStrB(p1, p2, p3, p4)
-end function
-function vbs_midB(p1, p2, p3)
-	vbs_midB = MidB(p1, p2, p3)
-end function
-function vbs_lenB(param)
-	vbs_lenB = LenB(param)
-end function
 </script>
