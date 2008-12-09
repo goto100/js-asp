@@ -62,24 +62,47 @@ Uploader.prototype.getInput = function() {
 			this.boundaryLength = vbs_lenB(this.boundary);
 		}
 		readBlock.read += block.size;
+		if (this.readSize == this.size) readBlock.size = readBlock.read;
 		if (readBlock.read >= readBlock.size || this.readSize == this.size) {
-			readBlock.data = Uploader.getBin(this.dataStream, this.readSize - readBlock.read, readBlock.size);
+			start = this.readSize - readBlock.read;
+			size = readBlock.read;
+			if (start != 0) size = readBlock.read + this.boundaryLength - 1;
+			readBlock.data = Uploader.getBin(this.dataStream, start, size);
 
-			var boundaryAt = vbs_inStrB(pos, readBlock.data, this.boundary, 0);
-			if (boundaryAt == 0) {
-				segment.data.size = readBlock.size;
-			} else if (boundaryAt == 1) {
-				infoEnd = vbs_inStrB(pos, readBlock.data, vbs_crlf + vbs_crlf, 0);
-				pos = this.boundaryLength + 2;
-				segment.info = Uploader.binToString(this.dataStream, this.charset, pos, infoEnd - pos - 1);
+			var boundaryAt = vbs_inStrB(1, readBlock.data, this.boundary, 0);
+			if (boundaryAt == 0) { // 没有，全部为数据
+				segment.data.size += readBlock.size;
+			} else if (boundaryAt == 1) { // 首位
+				segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+				infoEnd = vbs_inStrB(1, readBlock.data, vbs_crlf + vbs_crlf, 0);
+				segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
 				segment.data.start = infoEnd + this.boundaryLength + 1;
-				segment.data.size = readBlock.size;
+				boundaryAt = vbs_inStrB(infoEnd, readBlock.data, this.boundary, 0);
+				while (boundaryAt) {
+					segment.data.size = start + boundaryAt;
+					this.segments.push(segment);
+					segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+					infoEnd = vbs_inStrB(boundaryAt, readBlock.data, vbs_crlf + vbs_crlf, 0);
+					segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
+					segment.data.start = infoEnd + this.boundaryLength + 1;
+					boundaryAt = vbs_inStrB(boundaryAt, readBlock.data, this.boundary, 0);
+				}
 			} else {
 				segment.data.size += boundaryAt;
 				this.segments.push(segment);
 				segment = {data: {start: 0, size: 0}, stream: this.dataStream};
-				pos = boundaryAt + 3;
+				boundaryAt = vbs_inStrB(infoEnd, readBlock.data, this.boundary, 0);
+				while (boundaryAt) {
+					segment.data.size = start + boundaryAt;
+					this.segments.push(segment);
+					segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+					infoEnd = vbs_inStrB(boundaryAt, readBlock.data, vbs_crlf + vbs_crlf, 0);
+					segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
+					segment.data.start = infoEnd + this.boundaryLength + 1;
+					boundaryAt = vbs_inStrB(boundaryAt, readBlock.data, this.boundary, 0);
+				}
 			}
+
 
 			readBlock.read = 0;
 		}
