@@ -2,25 +2,22 @@
 <!--#include file="common.asp"-->
 <script language="javascript" runat="server">
 var fso = Server.CreateObject("Scripting.FileSystemObject");
-var file = fso.OpenTextFile(Server.MapPath("/js-asp/winzheng.xml"), 1);
+var file = fso.OpenTextFile(Server.MapPath("/js-asp/a.xml"), 1);
 var xml = file.ReadAll();
 
 function closeXML(xml) {
-	xml = xml.substr(0, xml.lastIndexOf("<"));
+	var last = xml.lastIndexOf("<");
+	if (last > xml.lastIndexOf(">")) xml = xml.substr(0, last); // 去除末尾未结束标签
 	var tags = [];
-	var patt = new RegExp("<([/a-z][a-z0-9]*)[^>]*?(\/?)>", "ig"); // 所有非自关闭标签
+	var patt = new RegExp("<([/a-z][a-z0-9]*)[^>]*?(\/?)>", "ig"); // 所有标签
 	var result;
 	var tag;
 	while ((result = patt.exec(xml)) != null) {
-		if (!result[2]) tags.push(result[1]);
-	}
-	for (var i = 0; i < tags.length; i++) {
-		while ("/" + tags[i] ==  tags[i + 1]) {
-			tags.splice(i, 2);
-			i--;
+		if (!result[2]) { // 非自关闭标签
+			if (result[1].substring(1) == tags[tags.length - 1]) tags.pop();
+			else tags.push(result[1]);
 		}
 	}
-	writeln(tags)
 	tags.reverse();
 	for (var i = 0; i < tags.length; i++) {
 		xml += "</" + tags[i] + ">";
@@ -29,5 +26,5 @@ function closeXML(xml) {
 }
 
 
-write("<textarea style='width; 100%; height: 200px'>" + closeXML(xml) + "</textarea>");
+write(closeXML(xml));
 </script>

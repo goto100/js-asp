@@ -5,15 +5,15 @@
 base2.JavaScript.bind(this);
 eval(base2.namespace);
 
-function write(str, bin) {
-	bin? Response.BinaryWrite(str) : Response.Write(str);
+function write() {
+	var str = "";
+	for (var i = 0; i < arguments.length; i++) str += arguments[i] + " ";
+	Response.Write(str);
 }
-function writeln(str, bin) {
-	if (str == undefined) str = "";
-	if (bin) {
-		Response.BinaryWrite(str);
-		Response.Write("<br />");
-	} else Response.Write(str + "<br />");
+function writeln() {
+	var str = "";
+	for (var i = 0; i < arguments.length; i++) str += arguments[i] + " ";
+	Response.Write(str + "<br />");
 }
 function writebin(bin) {
 	write("<pre>");
