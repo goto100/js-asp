@@ -75,8 +75,8 @@ Uploader.prototype.getInput = function() {
 			} else if (boundaryAt == 1) { // 首位
 				segment = {data: {start: 0, size: 0}, stream: this.dataStream};
 				infoEnd = vbs_inStrB(1, readBlock.data, vbs_crlf + vbs_crlf, 0);
-				segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
-				segment.data.start = infoEnd + this.boundaryLength + 1;
+				segment.info = Uploader.binToString(this.dataStream, this.charset, this.boundaryLength + 2, infoEnd - this.boundaryLength - 3);
+				segment.data.start = infoEnd + 3;
 				boundaryAt = vbs_inStrB(infoEnd, readBlock.data, this.boundary, 0);
 				while (boundaryAt) {
 					segment.data.size = start + boundaryAt;
@@ -97,9 +97,13 @@ Uploader.prototype.getInput = function() {
 					this.segments.push(segment);
 					segment = {data: {start: 0, size: 0}, stream: this.dataStream};
 					infoEnd = vbs_inStrB(boundaryAt, readBlock.data, vbs_crlf + vbs_crlf, 0);
-					segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
-					segment.data.start = infoEnd + this.boundaryLength + 1;
-					boundaryAt = vbs_inStrB(boundaryAt, readBlock.data, this.boundary, 0);
+					if (infoEnd) {
+						segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
+						segment.data.start = infoEnd + this.boundaryLength + 1;
+						boundaryAt = vbs_inStrB(boundaryAt, readBlock.data, this.boundary, 0);
+					} else {
+						
+					}
 				}
 			}
 

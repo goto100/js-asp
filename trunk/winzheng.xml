@@ -31,17 +31,17 @@
 			<li><a HREF="logging.php?action=logout&amp;formhash=d3deb7ea" CLASS="notabs">退出</a></li>
 			<li><a HREF="pm.php" TARGET="_blank">短消息</a></li>
 			<li><a HREF="search.php">搜索</a></li>
-			<li id="my" CLASS="dropmenu" onMouseOver="showMenu(this.id)"><a HREF="my.php">我的</a></li>
-			<li id="memcp" CLASS="dropmenu" onMouseOver="showMenu(this.id)"><a HREF="memcp.php">控制面板</a></li>
+			<li id="my" CLASS="dropmenu"><a HREF="my.php">我的</a></li>
+			<li id="memcp" CLASS="dropmenu"><a HREF="memcp.php">控制面板</a></li>
 			<li><a HREF="invite.php">邀请注册</a></li>
-			<li id="plugin" CLASS="dropmenu" onMouseOver="showMenu(this.id)"><a HREF="#">论坛设施</a></li>
+			<li id="plugin" CLASS="dropmenu"><a HREF="#">论坛设施</a></li>
 			<li><a HREF="faq.php">帮助</a></li>
 		</ul>
 	</div>
 	<div id="foruminfo">
 		<div id="userinfo">
 			<div id="nav"> <br />
-				<a HREF="space.php?action=viewpro&amp;uid=213732" CLASS="dropmenu" id="creditlist" onMouseOver="showMenu(this.id)">宇义</a> </div>
+				<a HREF="space.php?action=viewpro&amp;uid=213732" CLASS="dropmenu" id="creditlist">宇义</a> </div>
 			<p> 您上次访问是在: <em>2008-12-8 16:09</em> </p>
 		</div>
 		<div id="forumstats">
@@ -50,7 +50,7 @@
 			<p>主题: <em>620829</em>, 帖子: <em>10276251</em>, 会员: <em>112377</em>, 欢迎新会员 <cite><a HREF="space.php?username=xazaj">xazaj</a></cite></p>
 		</div>
 	</div>
-	<div id="announcement" onMouseOver="if(!anncount) {clearTimeout(annst);annst = 0}" onMouseOut="if(!annst) annst = setTimeout('announcementScroll()', anndelay);">
+	<div id="announcement">
 		<div id="announcementbody">
 			<ul>
 				<li><a HREF="announcement.php?id=216#216">以下版区招募版主, 欢迎您的加入<em>(2008-6-2)</em></a></li>
@@ -399,7 +399,7 @@
 <div id="footer">
 	<div CLASS="wrap">
 		<div id="footlinks"> <br />
-			<p> <a HREF="member.php?action=clearcookies&amp;formhash=d3deb7ea">清除 Cookies</a> - <a HREF="mailto:noreply@winzheng.com">联系我们</a> - <a HREF="http://bbs.winzheng.com/" TARGET="_blank">赢政天下论坛</a> - <a HREF="wap/" TARGET="_blank">WAP</a> - <a HREF="http://www.miibeian.gov.cn/" TARGET="_blank">陕ICP备05001896号</a> - <span CLASS="scrolltop" onClick="window.scrollTo(0,0);">TOP</span> - <span id="styleswitcher" CLASS="dropmenu" onMouseOver="showMenu(this.id)">界面风格</span>
+			<p> <a HREF="member.php?action=clearcookies&amp;formhash=d3deb7ea">清除 Cookies</a> - <a HREF="mailto:noreply@winzheng.com">联系我们</a> - <a HREF="http://bbs.winzheng.com/" TARGET="_blank">赢政天下论坛</a> - <a HREF="wap/" TARGET="_blank">WAP</a> - <a HREF="http://www.miibeian.gov.cn/" TARGET="_blank">陕ICP备05001896号</a> - <span CLASS="scrolltop" onClick="window.scrollTo(0,0);">TOP</span> - <span id="styleswitcher" CLASS="dropmenu">界面风格</span>
 				<div id="styleswitcher_menu" CLASS="popupmenu_popup" STYLE="display: none;">
 					<ul>
 						<li CLASS="current"><a HREF="###" onClick="setstyle(8)">winzheng</a></li>
