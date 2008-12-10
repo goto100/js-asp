@@ -2,7 +2,7 @@
 <!--#include file="common.asp"-->
 <script language="javascript" runat="server">
 var fso = Server.CreateObject("Scripting.FileSystemObject");
-var file = fso.OpenTextFile(Server.MapPath("/js-asp/a.xml"), 1);
+var file = fso.OpenTextFile(Server.MapPath("/js-asp/winzheng.xml"), 1);
 var xml = file.ReadAll();
 
 function closeXML(xml) {
@@ -28,3 +28,4 @@ function closeXML(xml) {
 
 write(closeXML(xml));
 </script>
+
