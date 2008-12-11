@@ -1,5 +1,4 @@
 <!--#include file="Uploader.asp" -->
-<!--#include file="Uploader2.asp" -->
 <script language="javascript" runat="server">
 function HttpRequest() {
 	this.search = getSearch();
@@ -17,7 +16,7 @@ function HttpRequest() {
 	function getInput() {
 		var input = {}
 		if (String(Request.ServerVariables("CONTENT_TYPE")).substr(0, 19) == "multipart/form-data") {
-			var uploader = DEBUG? new Uploader2() : new Uploader();
+			var uploader = new Uploader();
 			input = uploader.getInput();
 		} else {
 			var name;

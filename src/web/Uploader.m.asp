@@ -23,83 +23,120 @@ text
 function Uploader() {
 	this.filePath = Server.MapPath("/js-asp/img/upload.xml");
 	this.fso = Server.CreateObject("Scripting.FileSystemObject");
-	this.stream = Server.CreateObject("ADODB.Stream");
-	this.stream.Type = 1;
-	this.stream.Mode = 3;
+	this.dataStream = Server.CreateObject("ADODB.Stream");
+	this.dataStream.Type = 1;
+	this.dataStream.Mode = 3;
 	this.charset = String(Request.ServerVariables("HTTP_ACCEPT_CHARSET"));
 	// this.charset = this.charset.substr(0, this.charset.indexOf(","));
 	this.charset = "UTF-8";
 	this.size = 0;
-	this.blockSize = {min: 1024, max: 65536};
+	this.block = {size: {min: 1024, max: 65536}};
+	this.outputs = {length: 0};
+	this.input = {};
+	this.boundary;
+	this.boundaryLength;
 	this.segments = [];
 }
 
 Uploader.prototype.getInput = function() {
 	if (Request.TotalBytes < 1) return false;
-	var input = {};
 
-	this.stream.Open();
+	this.dataStream.Open();
 	this.size = Request.TotalBytes;
-	this.separator;
-	this.separatorLength;
-	var block = {size: Math.round(this.size / 1000)};
-	if (block.size < this.blockSize.min) block.size = this.blockSize.min;
-	if (block.size > this.blockSize.max) block.size = this.blockSize.max;
-	var readBlock = {size: 1024, read: 0};
-	var segment = {data: {start: 0, size: 0}, stream: this.stream};
 	this.readSize = 0;
-	this.outputProgress();
-	var i = 0;
 
+	var block = {size: Math.round(this.size / 1000)};
+	if (block.size < this.block.size.min) block.size = this.block.size.min;
+	if (block.size > this.block.size.max) block.size = this.block.size.max;
+	var readBlock = {size: 1024, read: 0};
+	var segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+	var infoEnd = 0;
+	this.outputProgress();
+
+	var i = 0;
 	while (this.readSize < this.size) {
 		if (this.readSize + block.size > this.size) block.size = this.size - this.readSize;
 		block.data = Request.BinaryRead(block.size);
-		this.stream.Write(block.data);
+		this.dataStream.Write(block.data);
 		this.readSize += block.size;
 		if (i == 0) {
-			this.separator = vbs_midB(block.data, 1, vbs_inStrB(1, block.data, vbs_crlf, 0) - 1);
-			this.separatorLength = vbs_lenB(this.separator);
+			this.boundary = vbs_midB(block.data, 1, vbs_inStrB(1, block.data, vbs_crlf, 0) - 1);
+			this.boundaryLength = vbs_lenB(this.boundary);
+		}
+		readBlock.read += block.size;
+		if (this.readSize == this.size) readBlock.size = readBlock.read;
+		if (readBlock.read >= readBlock.size || this.readSize == this.size) {
+			start = this.readSize - readBlock.read;
+			size = readBlock.read;
+			if (start != 0) size += this.boundaryLength - 1;
+			readBlock.data = Uploader.getBin(this.dataStream, start, size);
+
+
+
+			var boundaryAt = vbs_inStrB(1, readBlock.data, this.boundary, 0);
+			if (boundaryAt == 0) { // 没有，全部为数据
+				segment.data.size += readBlock.read;
+			} else if (boundaryAt == 1) { // 首位
+				segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+				infoEnd = vbs_inStrB(1, readBlock.data, vbs_crlf + vbs_crlf, 0);
+				segment.info = Uploader.binToString(this.dataStream, this.charset, this.boundaryLength + 2, infoEnd - this.boundaryLength - 3);
+				segment.data.start = infoEnd + 3;
+				boundaryAt = vbs_inStrB(infoEnd, readBlock.data, this.boundary, 0);
+				while (boundaryAt) {
+					segment.data.size = start + boundaryAt;
+					this.segments.push(segment);
+					segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+					infoEnd = vbs_inStrB(boundaryAt, readBlock.data, vbs_crlf + vbs_crlf, 0);
+					segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
+					segment.data.start = infoEnd + this.boundaryLength + 1;
+					boundaryAt = vbs_inStrB(boundaryAt, readBlock.data, this.boundary, 0);
+				}
+			} else {
+				segment.data.size += boundaryAt;
+				this.segments.push(segment);
+				segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+				boundaryAt = vbs_inStrB(infoEnd, readBlock.data, this.boundary, 0);
+				while (boundaryAt) {
+					segment.data.size = start + boundaryAt;
+					this.segments.push(segment);
+					segment = {data: {start: 0, size: 0}, stream: this.dataStream};
+					infoEnd = vbs_inStrB(boundaryAt, readBlock.data, vbs_crlf + vbs_crlf, 0);
+					if (infoEnd) {
+						segment.info = Uploader.binToString(this.dataStream, this.charset, start, start + infoEnd);
+						segment.data.start = infoEnd + this.boundaryLength + 1;
+						boundaryAt = vbs_inStrB(boundaryAt, readBlock.data, this.boundary, 0);
+					} else {
+						
+					}
+				}
+			}
+
+
+			readBlock.read = 0;
 		}
 
 		this.outputProgress();
 		i++;
 	}
 
-	this.fillSegments();
-
 	for (var i = 0; i < this.segments.length; i++) {
 		var item = this.getForm(this.segments[i].info, this.segments[i].start, this.segments[i].size);
-		if (instanceOf(item.value, UploaderFile)) {
-			if (!this.input[item.name]) this.input[item.name] = [];
-			if (item.value.name) this.input[item.name].push(item.value);
-		} else {
-			if (!this.input[item.name]) this.input[item.name] = item.value;
-			else this.input[item.name] += ", " + item.value;
-		}
+		writeln(this.segments[i].info);
+		writeln(this.segments[i].data.start + " has " + this.segments[i].data.size)
+		this.fillInput(item);
 	}
 
-	return input;
+	return this.input;
 }
 
-Uploader.prototype.fillSegments = function() {
-	this.stream.Position = 0;
-	var data = this.stream.Read();
-
-	var start = 1;
-	start += this.separatorLength + 1;
-
-	var infoEnd = 0;
-	while (start + 3 < this.size) {
-		infoEnd = vbs_inStrB(start, data, vbs_crlf + vbs_crlf, 0) + 3;
-		var info = Uploader.binToString(this.stream, this.charset, start, infoEnd - start - 4);
-		start = vbs_inStrB(infoEnd, data, this.separator, 0);
-
-		var segment = {start: infoEnd, size: start - infoEnd - 3};
-		this.segments.push(segment);
-
-		start += this.separatorLength + 1;
+Uploader.prototype.fillInput = function(item) {
+	if (instanceOf(item.value, UploaderFile)) {
+		if (!this.input[item.name]) this.input[item.name] = [];
+		if (item.value.name) this.input[item.name].push(item.value);
+	} else {
+		if (!this.input[item.name]) this.input[item.name] = item.value;
+		else this.input[item.name] += ", " + item.value;
 	}
-	delete data;
 }
 
 Uploader.prototype.getForm = function(info, start, size) {
@@ -108,16 +145,16 @@ Uploader.prototype.getForm = function(info, start, size) {
 	if (info.match(/ filename\=\"(.*?)\"/ig)) info.filename = RegExp.$1;
 	if (info.match(/ name\=\"(.+?)\"/ig)) item.name = RegExp.$1;
 
-	this.stream.Position = start;
+	this.dataStream.Position = start;
 	if (info.filename != undefined) { // A file
 		var file = new UploaderFile();
 		file.path = info.filename;
 		file.name = file.path.substring(file.path.lastIndexOf("\\") + 1);
 		if (info.match(/Content\-Type\: (.+?)$/ig)) file.contentType = RegExp.$1;
 		file.size = size;
-		file.setStreamSource(this.stream, start);
+		file.setStreamSource(this.dataStream, start);
 		item.value = file;
-	} else item.value = Uploader.binToString(this.stream, this.charset, start, size);
+	} else item.value = Uploader.binToString(this.dataStream, this.charset, start, size);
 	return item;
 }
 
@@ -126,7 +163,7 @@ Uploader.prototype.outputProgress = function() {
 	file.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	file.WriteLine("<upload read=\"" + this.readSize + "\" total=\"" + this.size + "\" />");
 	file.Close();
-	if (this.readSize == this.size && false) {
+	if (this.readSize == this.size) {
 		if (this.fso.FileExists(this.filePath)) this.fso.DeleteFile(this.filePath);
 		delete this.fso;
 	}
