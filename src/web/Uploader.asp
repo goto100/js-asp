@@ -25,45 +25,21 @@ function Uploader() {
 	this.fso = Server.CreateObject("Scripting.FileSystemObject");
 	this.stream = Server.CreateObject("ADODB.Stream");
 	this.stream.Type = 1;
-	this.stream.Mode = 3;
+	this.stream.Open();
+	this.separator;
+	this.separatorLength;
 	this.charset = String(Request.ServerVariables("HTTP_ACCEPT_CHARSET"));
 	// this.charset = this.charset.substr(0, this.charset.indexOf(","));
 	this.charset = "UTF-8";
-	this.size = 0;
+	this.size = Request.TotalBytes;
+	this.readSize = 0;
 	this.blockSize = {min: 1024, max: 65536};
 	this.segments = [];
+	this.input = {};
 }
 
 Uploader.prototype.getInput = function() {
-	if (Request.TotalBytes < 1) return false;
-	var input = {};
-
-	this.stream.Open();
-	this.size = Request.TotalBytes;
-	this.separator;
-	this.separatorLength;
-	var block = {size: Math.round(this.size / 1000)};
-	if (block.size < this.blockSize.min) block.size = this.blockSize.min;
-	if (block.size > this.blockSize.max) block.size = this.blockSize.max;
-	var readBlock = {size: 1024, read: 0};
-	var segment = {data: {start: 0, size: 0}, stream: this.stream};
-	this.readSize = 0;
-	this.outputProgress();
-	var i = 0;
-
-	while (this.readSize < this.size) {
-		if (this.readSize + block.size > this.size) block.size = this.size - this.readSize;
-		block.data = Request.BinaryRead(block.size);
-		this.stream.Write(block.data);
-		this.readSize += block.size;
-		if (i == 0) {
-			this.separator = vbs_midB(block.data, 1, vbs_inStrB(1, block.data, vbs_crlf, 0) - 1);
-			this.separatorLength = vbs_lenB(this.separator);
-		}
-
-		this.outputProgress();
-		i++;
-	}
+	this.readData();
 
 	this.fillSegments();
 
@@ -78,12 +54,33 @@ Uploader.prototype.getInput = function() {
 		}
 	}
 
-	return input;
+	return this.input;
+}
+
+Uploader.prototype.readData = function() {
+	if (Request.TotalBytes < 1) return false;
+
+	var block = {size: Math.round(this.size / 1000)};
+	if (block.size < this.blockSize.min) block.size = this.blockSize.min;
+	if (block.size > this.blockSize.max) block.size = this.blockSize.max;
+
+	this.outputProgress();
+
+	while (this.readSize < this.size) {
+		if (this.readSize + block.size > this.size) block.size = this.size - this.readSize;
+		block.data = Request.BinaryRead(block.size);
+		this.stream.Write(block.data);
+		this.readSize += block.size;
+
+		this.outputProgress();
+	}
 }
 
 Uploader.prototype.fillSegments = function() {
 	this.stream.Position = 0;
 	var data = this.stream.Read();
+	this.separator = vbs_midB(data, 1, vbs_inStrB(1, data, vbs_crlf, 0) - 1);
+	this.separatorLength = vbs_lenB(this.separator);
 
 	var start = 1;
 	start += this.separatorLength + 1;
@@ -94,7 +91,7 @@ Uploader.prototype.fillSegments = function() {
 		var info = Uploader.binToString(this.stream, this.charset, start, infoEnd - start - 4);
 		start = vbs_inStrB(infoEnd, data, this.separator, 0);
 
-		var segment = {start: infoEnd, size: start - infoEnd - 3};
+		var segment = {info: info, start: infoEnd, size: start - infoEnd - 3};
 		this.segments.push(segment);
 
 		start += this.separatorLength + 1;
