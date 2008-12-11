@@ -9,6 +9,14 @@ function Controller() {
 	this.ActivedAction;
 }
 
+Controller.ADD_ACTION = 1;
+Controller.EDIT_ACTION = 2;
+Controller.LIST_ACTION = 3;
+Controller.CREATE_ACTION = 4;
+Controller.READ_ACTION = 5;
+Controller.UPDATE_ACTION = 6;
+Controller.CREATE_ACTION = 7;
+
 Controller.prototype.addActionClass = function(ActionClass, actived) {
 	if (actived === true || this.dispatch(ActionClass)) {
 		this.ActivedAction = ActionClass;
