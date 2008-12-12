@@ -14,10 +14,20 @@ function HttpRequest() {
 
 	// Request.Form
 	function getInput() {
-		var input = {}
+		var input = new Map();
 		if (String(Request.ServerVariables("CONTENT_TYPE")).substr(0, 19) == "multipart/form-data") {
 			var uploader = new Uploader();
-			input = uploader.getInput();
+			var items = uploader.getItems();
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+				if (instanceOf(item.value, UploaderFile)) {
+					if (!this.input.get(item.name)) this.input.put(item.name, []);
+					if (item.value.name) this.input.get(item.name).push(item.value);
+				} else {
+					if (!this.input.get(item.name)) this.input.put(item.name, item.value);
+					else this.input.put(item.name, this.input.get(item.name) += ", " + item.value);
+				}
+			}
 		} else {
 			var name;
 			var e = new Enumerator(Request.Form);
@@ -32,16 +42,23 @@ function HttpRequest() {
 	// Request.QueryString
 	function getSearch() {
 		var queryString = String(Request.QueryString);
-		var search = queryString.split("&");
-		if (search[0].indexOf("=") == -1) search[0] = search[0].split("/");
-		else search.unshift(null);
-		for (var i = 1/* Ignore path */; i < search.length; i++) {
-			search[i] = new String(search[i]);
-			search[i].name = search[i].substr(0, search[i].indexOf("="));
-			search[i].valueOf = function() {
-				return this.substr(this.indexOf("=") + 1);
+		var searches = queryString.split("&");
+		var search = new Map();
+		if (searches[0] && searches[0].indexOf("=") == -1) {
+			search.path = searches[0].split("/");
+			search.path.toString = function() {
+				return this.join("/");
 			}
-			search[search[i].name] = search[i];
+		}
+		for (var item, pos, i = 1/* Ignore path */; i < searches.length; i++) {
+			pos = searches[i].indexOf("=");
+			item = {
+				name: searches[i].substr(0, pos),
+				value: searches[i].substr(pos + 1)
+			}
+			var value = search.get(item.name) || [];
+			value.push(item.value);
+			search.put(item.name, value);
 		}
 		return search;
 	}
