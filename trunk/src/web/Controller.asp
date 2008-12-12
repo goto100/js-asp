@@ -9,16 +9,8 @@ function Controller() {
 	this.ActivedAction;
 }
 
-Controller.ADD_ACTION = 1;
-Controller.EDIT_ACTION = 2;
-Controller.LIST_ACTION = 3;
-Controller.CREATE_ACTION = 4;
-Controller.READ_ACTION = 5;
-Controller.UPDATE_ACTION = 6;
-Controller.CREATE_ACTION = 7;
-
 Controller.prototype.addActionClass = function(ActionClass, actived) {
-	if (actived === true || this.dispatch(ActionClass)) {
+	if (this.dispatch(actived)) {
 		this.ActivedAction = ActionClass;
 	}
 }
@@ -31,9 +23,30 @@ Controller.prototype.execute = function() {
 	}
 }
 
-Controller.prototype.dispatch = function(ActionClass) {
-	if (instanceOf(ActionClass.prototype, ListAction)) return true;
-	return false;
+Controller.prototype.dispatch = function(actived) {
+	switch (actived) {
+		case "list":
+			if (this.request.method == "GET" && !this.request.search.path) return true;
+			break;
+		case "show":
+			if (this.request.method == "GET" && this.request.search.path) return true;
+			break;
+		case "new":
+			if (this.request.method == "GET" && ["new", "post", "create"].contains(this.request.search.path)) return true;
+			break;
+		case "edit":
+			if (this.request.method == "GET" && ["new", "post", "create"].contains(this.request.search.path)) return true;
+			break;
+		case "save":
+			if (this.request.method == "PUT") return true;
+			break;
+		case "update":
+			if (this.request.method == "POST" && this.request.search.path) return true;
+			break;
+		case "delete":
+			if (this.request.method == "DELETE" && this.request.search.path) return true;
+			break;
+	}
 }
 
 </script>

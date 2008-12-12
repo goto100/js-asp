@@ -34,27 +34,13 @@ function Uploader() {
 	this.size = Request.TotalBytes;
 	this.readSize = 0;
 	this.blockSize = {min: 1024, max: 65536};
-	this.segments = [];
-	this.input = {};
+	this.items = [];
 }
 
-Uploader.prototype.getInput = function() {
+Uploader.prototype.getItems = function() {
 	this.readData();
-
 	this.fillSegments();
-
-	for (var i = 0; i < this.segments.length; i++) {
-		var item = this.getForm(this.segments[i].info, this.segments[i].start, this.segments[i].size);
-		if (instanceOf(item.value, UploaderFile)) {
-			if (!this.input[item.name]) this.input[item.name] = [];
-			if (item.value.name) this.input[item.name].push(item.value);
-		} else {
-			if (!this.input[item.name]) this.input[item.name] = item.value;
-			else this.input[item.name] += ", " + item.value;
-		}
-	}
-
-	return this.input;
+	return this.items;
 }
 
 Uploader.prototype.readData = function() {
@@ -92,7 +78,8 @@ Uploader.prototype.fillSegments = function() {
 		start = vbs_inStrB(infoEnd, data, this.separator, 0);
 
 		var segment = {info: info, start: infoEnd, size: start - infoEnd - 3};
-		this.segments.push(segment);
+		var item = this.getForm(segment.info, segment.start, segment.size);
+		this.items.push(item);
 
 		start += this.separatorLength + 1;
 	}
