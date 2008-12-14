@@ -15,7 +15,7 @@ function HttpRequest() {
 	// Request.Form
 	function getInput() {
 		var input = new Map();
-		if (String(Request.ServerVariables("CONTENT_TYPE")).substr(0, 19) == "multipart/form-data") {
+		if (String(Request.ServerVariables("CONTENT_TYPE")).substring(0, 19) == "multipart/form-data") {
 			var uploader = new Uploader();
 			var items = uploader.getItems();
 			for (var i = 0; i < items.length; i++) {

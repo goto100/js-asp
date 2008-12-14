@@ -7,7 +7,7 @@ var xml = file.ReadAll();
 
 function closeXML(xml) {
 	var last = xml.lastIndexOf("<");
-	if (last > xml.lastIndexOf(">")) xml = xml.substr(0, last); // 去除末尾未结束标签
+	if (last > xml.lastIndexOf(">")) xml = xml.substring(0, last); // 去除末尾未结束标签
 	var tags = [];
 	var patt = new RegExp("<([/a-z][a-z0-9]*)[^>]*?(\/?)>", "ig"); // 所有标签
 	var result;
