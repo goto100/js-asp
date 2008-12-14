@@ -2,8 +2,8 @@
 <!--#include file="web/Controller.asp" -->
 <!--#include file="web/Action.asp" -->
 <script language="javascript" runat="server">
-base2.JavaScript.bind(this);
 eval(base2.namespace);
+JavaScript.bind(this);
 
 function write() {
 	var str = "";
