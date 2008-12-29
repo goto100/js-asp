@@ -34,8 +34,7 @@ CategoryDao.prototype.get = function(id, withSubs) {
 
 	for (var record; !records.atEnd(); records.moveNext()) {
 		record = records.item();
-		var category = new HuanCategory;
-		category.fill(record);
+		var category = dao.toPojo(record);
 		this.addCategory(category);
 	}
 	return true;
@@ -58,15 +57,6 @@ CategoryDao.prototype.addCategory = function(category) {
 		parent.appendNode(category);
 	}
 	lastCategory = category;
-}
-
-CategoryDao.prototype.fill = function(record) {
-	var category = new Category();
-	category.id = record.id;
-	category.parent = {
-		id: record.parentId
-	}
-	if (this.fillCategory) this.fillCategory(record);
 }
 
 CategoryDao.prototype.setParentCategory = function(id) {
@@ -140,6 +130,24 @@ CategoryDao.prototype.save = function(category) {
 	}
 }
 
+CategoryDao.prototype.list = function() {
+	var pojos = [];
+	var recs = this.db.query("SELECT * FROM " + this.table);
+	if (recs) {
+		var dao = this;
+		recs.forEach(function(rec) {
+			pojos.push(dao.toPojo(rec));
+		});
+	}
+	return pojos;
+}
+
+CategoryDao.prototype.toPojo = function(record) {
+	var category = new Category();
+	category.id = record.id;
+	category.parent = new Category(record.parentId)
+}
+
 CategoryDao.prototype.update = function(id, category) {
 	if (category) this.fill(category);
 	if (this.fillUpdateItem) this.fillUpdateItem(updateItem);
@@ -154,13 +162,5 @@ CategoryDao.prototype.del = function(id) {
 		this.db.del(this.table, "id = " + id);
 		this.db.endTrans();
 	}
-}
-
-CategoryDao.prototype.setTableName = function(categoryTableName) {
-	this.table = categoryTableName;
-}
-
-CategoryDao.prototype.setLoadItems = function() {
-	for (var i = 0; i < arguments.length; i++) loadItems.push(arguments[i]);
 }
 </script>
