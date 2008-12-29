@@ -104,7 +104,7 @@ DBAccess.prototype.query = function(sql, length, currentPage, outVbArr) {
 	if (!outVbArr) {
 		if (length == 1) {
 			if (rs.BOF && rs.EOF) return;
-			return new Record(rs).item();
+			return new Record(rs);
 		} else {
 			var records = new RecordSet(rs);
 			return records.atEnd()? null : records;
@@ -151,7 +151,7 @@ DBAccess.prototype.insert = function(table, map, returnRecord) {
 			}
 		});
 		rs.Update();
-		return new Record(rs).item();
+		return new Record(rs);
 	} else {
 		var sql = "INSERT INTO [" + table + "] (", valueStr = "";
 		map.forEach(function(value, name) {
@@ -176,11 +176,11 @@ DBAccess.prototype.del = function(table, where, range) {
 	return this.execute(sql);
 }
 
-DBAccess.prototype.doTrans = function(callback) {
+DBAccess.prototype.doTrans = function(callback, context) {
 	if (!callback) return;
 
 	this._conn.BeginTrans();
-	callback();
+	Function.bind(callback, context)();
 	if (this._conn.Errors.Count > 0) {
 		this._conn.Errors.Clear();
 		this._conn.RollbackTrans();
