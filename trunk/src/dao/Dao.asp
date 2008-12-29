@@ -1,13 +1,13 @@
 <script language="javascript" runat="server">
 function Dao() {
 	this.db = null;
-	this.tableName = "";
+	this.table = "";
 	this.Pojo = null;
 }
 
 Dao.prototype.list = function(pageSize, currentPage) {
 	var pojos = [];
-	var recs = this.db.query("SELECT * FROM " + this.db.prefix + "_" + this.tableName, pageSize, currentPage);
+	var recs = this.db.query("SELECT * FROM " + this.table, pageSize, currentPage);
 	if (recs) {
 		var dao = this;
 		recs.forEach(function(rec) {
@@ -18,14 +18,14 @@ Dao.prototype.list = function(pageSize, currentPage) {
 }
 
 Dao.prototype.update = function(pojos, id) {
-	this.db.update(this.db.prefix + "_" + this.tableName, this.fromPojo(pojos), "id IN( " + id + ")");
+	this.db.update(this.table, this.fromPojo(pojos), "id IN( " + id + ")");
 }
 
 Dao.prototype.save = function(pojos) {
-	this.db.insert(this.db.prefix + "_" + this.tableName, this.fromPojo(pojos));
+	this.db.insert(this.table, this.fromPojo(pojos));
 }
 
 Dao.prototype.del = function(id) {
-	this.db.del(this.db.prefix + "_" + this.tableName, "id IN (" + id + ")");
+	this.db.del(this.table, "id IN (" + id + ")");
 }
 </script>
