@@ -10,8 +10,8 @@ Dao.prototype.list = function(pageSize, currentPage) {
 	var recs = this.db.query("SELECT * FROM " + this.table, pageSize, currentPage);
 	if (recs) {
 		var dao = this;
-		recs.forEach(function(rec) {
-			pojos.push(dao.toPojo(rec));
+		recs.forEach(function(record) {
+			pojos.push(dao.toPojo(record));
 		});
 	}
 	return pojos;

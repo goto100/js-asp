@@ -29,8 +29,8 @@ RecordSet.prototype.moveNext = function() {
 RecordSet.prototype.toPojos = function(mapping) {
 	var pojos = [];
 	this.forEach(function(record) {
-		var names = record.getFieldNames();
-		var result = {}
+		var names = record.getKeys();
+		var result = {};
 		for (var i = 0; i < names.length; i++) result[names[i]] = record.get(names[i]);
 		pojos.push(result);
 	});

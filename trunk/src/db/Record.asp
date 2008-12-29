@@ -4,7 +4,11 @@ function Record(rs) {
 }
 
 Record.prototype.get = function(name) {
-	var value = this._rs.Fields(name).Value;
+	try {
+		var value = this._rs.Fields(name).Value;
+	} catch(e) {
+		// Do nothing
+	}
 	if (typeof value == "date") {
 		value = new Date(value);
 		value.setMinutes(value.getMinutes() - value.getTimezoneOffset());
@@ -12,12 +16,12 @@ Record.prototype.get = function(name) {
 	return value;
 }
 
-Record.prototype.getFieldNames = function() {
-	var names = [];
+Record.prototype.getKeys = function() {
+	var keys = [];
 	var e = new Enumerator(this._rs.Fields);
-	for (; !e.atEnd(); e.moveNext()) names.push(e.item().Name);
+	for (; !e.atEnd(); e.moveNext()) keys.push(e.item().Name);
 
-	return names;
+	return keys;
 }
 
 </script>

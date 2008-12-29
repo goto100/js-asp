@@ -5,14 +5,10 @@
 eval(base2.namespace);
 JavaScript.bind(this);
 
-function write() {
-	var str = "";
-	for (var i = 0; i < arguments.length; i++) str += arguments[i] + " ";
+function write(str) {
 	Response.Write(str);
 }
-function writeln() {
-	var str = "";
-	for (var i = 0; i < arguments.length; i++) str += arguments[i] + " ";
+function writeln(str) {
 	Response.Write(str + "<br />");
 }
 function writebin(bin) {

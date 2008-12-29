@@ -3,20 +3,12 @@ function Category(id) {
 	this.id = id || 0;
 	this.parent = null;
 	this.isLeaf = false;
-	this.length = 0;
 	this.depth = 0;
-	this.lFlag;
-	this.rFlag;
-
+	this.length = 0;
 }
-Category.prototype = new Array();
-
-Category.prototype.appendNode = function(node) {
-	this[this.length++] = node;
+Category.prototype.push = function(category) {
+	category.parent = this;
+	category.depth = this.depth + 1;
+	this[this.length++] = category;
 }
-
-Category.prototype.clear = function() {
-	for (; this.length; this.length--) delete this[this.length];
-}
-
 </script>
