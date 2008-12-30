@@ -4,10 +4,10 @@ function HttpRequest() {
 	this.search = getSearch();
 	this.input = getInput();
 
-	this.method = this.input["__method__"]? this.input["__method__"].toUpperCase() : "GET";
-	if (!["GET", "POST", "PUT", "DELETE", "HEAD"].contains(this.method)) {
-		this.method = Request.ServerVariables("REQUEST_METHOD");
-	}
+	this.method = Request.ServerVariables("REQUEST_METHOD");
+	var methodOverwrite = this.input.get("__method__");
+	if (methodOverwrite) methodOverwrite = methodOverwrite.toUpperCase();
+	if (["GET", "POST", "PUT", "DELETE", "HEAD"].contains(methodOverwrite)) this.method = methodOverwrite;
 
 	this.path = String(Request.ServerVariables("PATH_INFO"));
 	this._ip;
@@ -33,7 +33,7 @@ function HttpRequest() {
 			var e = new Enumerator(Request.Form);
 			for (var i = 0; !e.atEnd(); e.moveNext(), i++) {
 				name = String(e.item());
-				input[i] = input[name] = String(Request.Form(name));
+				input.put(name, String(Request.Form(name)));
 			}
 		}
 		return input;
@@ -46,6 +46,9 @@ function HttpRequest() {
 		var search = new Map();
 		if (searches[0] && searches[0].indexOf("=") == -1) {
 			search.path = searches[0].split("/");
+			search.path = search.path.filter(function(part) {
+				if (part) return true;
+			});
 			search.path.toString = function() {
 				return this.join("/");
 			}

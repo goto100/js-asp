@@ -1,5 +1,6 @@
 <script language="javascript" runat="server">
 function PutAction() {
+	this.method = "PUT";
 	this.form = {}
 	this.hasError = false;
 }

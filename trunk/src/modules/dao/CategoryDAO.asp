@@ -10,7 +10,6 @@ CategoryDao.toPojo = function(record) {
 	category.id = record.get("id");
 	var parentId = record.get("parentId");
 	if (parentId) category.parent = new Category(parentId);
-	if (record.get("rFlag") - record.get("lFlag") == 1) category.isLeaf = true;
 	category.name = record.get("name");
 	category.description = record.get("description");
 	return category;
@@ -18,8 +17,7 @@ CategoryDao.toPojo = function(record) {
 
 CategoryDao.fromPojo = function(category) {
 	var record = {};
-	record.id = category.id;
-	record.parentId = category.parent? category.parent.id : null;
+	if (category.parent) record.parentId = category.parent.id;
 	record.name = category.name;
 	record.description = category.description;
 	return new Map(record);
@@ -29,7 +27,7 @@ CategoryDao.prototype = new Dao();
 
 CategoryDao.prototype.get = function(id, withSubs) {
 	if (!withSubs) { // Only one record
-		var sql = "SELECT TOP 1 id, lFlag, rFlag";
+		var sql = "SELECT TOP 1 id, lFlag, rFlag, parentId";
 		sql += ", name, description";
 		sql += " FROM [" + this.table + "] WHERE id = " + id;
 		var record = this.db.query(sql, 1);
@@ -136,8 +134,10 @@ CategoryDao.prototype.save = function(category) {
 }
 
 CategoryDao.prototype.update = function(id, category) {
-	if (category) this.fill(category);
-	this.db.update(this.table, updateItem, "id = " + id);
+	if (!id) id = category.id;
+
+	var record = CategoryDao.fromPojo(category);
+	this.db.update(this.table, record, "id = " + id);
 }
 
 CategoryDao.prototype.del = function(id) {
