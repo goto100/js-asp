@@ -1,5 +1,6 @@
 <script language="javascript" runat="server">
 function PostAction() {
+	this.method = "POST";
 	this.form = {}
 	this.hasError = false;
 }

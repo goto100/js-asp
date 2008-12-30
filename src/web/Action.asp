@@ -1,8 +1,9 @@
 <script language="javascript" runat="server">
 function Action() {
+	this.method = "GET";
 	this.request;
 	this.search;
-	this.inputl;
+	this.input;
 	this.action = function() {
 		writeln("This action was not defined.");
 	};
@@ -12,6 +13,10 @@ Action.prototype.setController = function(controller) {
 	this.request = controller.request;
 	this.search = this.request.search;
 	this.input = this.request.input;
+}
+
+Action.prototype.redirect = function(url) { 
+	Response.Redirect(url);
 }
 
 Action.prototype.execute = function() {
@@ -88,19 +93,13 @@ Action.prototype.getDate = function(str, min, max, matchs) {
 	return date;
 }
 
-Action.prototype.getIdParam = function(type) {
-	if (this.param.id) return this.param.id;
-	if (!this.search.id && !this.input.id) this.controller.outputPage("badURL");
-	try {
-		switch (type) {
-			case "string": return this.search.id || this.input.id;
-			case "number":
-			default:
-				return this.getNumber(this.search.id || this.input.id, 1);
-		}
-	} catch (e) {
-		return 0;
-	}
+Action.prototype.getId = function() {
+	if (!this.search.path) return;
+	var numbers = this.search.path.filter(function(part) {
+		part = parseInt(part);
+		if (part) return true;
+	});
+	return numbers[numbers.length - 1];
 }
 
 </script>

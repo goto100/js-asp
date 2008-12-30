@@ -1,5 +1,6 @@
 <script language="javascript" runat="server">
 function ListAction() {
+	this.method = "GET";
 	this.pageSize;
 	this.page;
 }
