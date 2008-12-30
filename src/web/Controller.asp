@@ -1,33 +1,39 @@
 <!--#include file="HttpRequest.asp" -->
 <!--#include file="Action.asp" -->
 <!--#include file="FormAction.asp" -->
-<!--#include file="SubmissionAction.asp" -->
+<!--#include file="PostAction.asp" -->
 <!--#include file="ListAction.asp" -->
 <script language="javascript" runat="server">
 function Controller() {
 	this.request = new HttpRequest();
-	this.path = new Map();
+	this.actions = [];
 }
 
-Controller.prototype.add = function(pattern, Action) {
-	var path = {
-		doGet: null,
-		doPost: null,
-		doPut: null,
-		doHead: null,
-		doDelete: null
-	};
-	this.path.put(pattern, path);
-	return path;
+Controller.prototype.add = function(path, ActionClass) {
+	if (!ActionClass) ActionClass = Action;
+	var action = new ActionClass();
+	action.setController(this);
+	action.path = path;
+	if (typeof action.path == "string") action.path = action.path.split("/");
+	this.actions.push(action);
+	return action;
 }
 
 Controller.prototype.execute = function() {
-	var path = this.request.search.path.toString();
+	var path = this.request.search.path;
 	var method = this.request.method;
-	this.path.forEach(function(value, key) {
-		if (path.match(new RegExp("^" + key + "", "ig"))) {
-			var func = value["do" + method.slice(0, 1) + method.slice(1).toLowerCase()];
-			if (func) func();
+	
+	this.actions.forEach(function(action) {
+		if (action.path instanceof RegExp) {
+			if (path && action.path.test(path)) {
+				action.action();
+			}
+		} else if (action.path instanceof Array) {
+			if (path && action.path.length == path.length && action.path.every(function(p, i) {
+				return path[i]? new RegExp(p, "ig").test(path[i]) : false;
+			})) {
+				action.action();
+			}
 		}
 	});
 }

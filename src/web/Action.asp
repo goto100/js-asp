@@ -1,9 +1,11 @@
 <script language="javascript" runat="server">
 function Action() {
-	this.request = null;
-	this.search = null;
-	this.input = null;
-	this.action = function() {};
+	this.request;
+	this.search;
+	this.inputl;
+	this.action = function() {
+		writeln("This action was not defined.");
+	};
 }
 
 Action.prototype.setController = function(controller) {

@@ -1,9 +1,9 @@
 <script language="javascript" runat="server">
-function SubmissionAction() {
+function PutAction() {
 	this.form = {}
 	this.hasError = false;
 }
-SubmissionAction.prototype = new Action();
+PutAction.prototype = new Action();
 
 function DBActionFormItem(value) {
 	this.input = null;
@@ -13,7 +13,7 @@ function DBActionFormItem(value) {
 	}
 }
 
-SubmissionAction.prototype.getIdParam = function() {
+PutAction.prototype.getIdParam = function() {
 	if (this.input.id) {
 		try {
 			return this.getNumber(this.input.id, 1);
@@ -24,7 +24,7 @@ SubmissionAction.prototype.getIdParam = function() {
 	return 0;
 }
 
-SubmissionAction.prototype.withStringParam = function(name, value, minLength, maxLength, matchs) {
+PutAction.prototype.withStringParam = function(name, value, minLength, maxLength, matchs) {
 	var obj, names = name.split(".");
 	for (obj = this.form, i = 0; i < names.length; i++) {
 		if (!obj[names[i]]) obj[names[i]] = {};
@@ -51,7 +51,7 @@ SubmissionAction.prototype.withStringParam = function(name, value, minLength, ma
 	if (form.error) this.hasError = true;
 }
 
-SubmissionAction.prototype.withStringsParam = function(name, value, spliter, minLength, maxLength, matchs) {
+PutAction.prototype.withStringsParam = function(name, value, spliter, minLength, maxLength, matchs) {
 	if (!spliter) spliter = /,\s*/ig;
 	var form = this.form[name] = new DBActionFormItem(this.input[name]);
 	if (!form.valueOf()) {
@@ -61,7 +61,7 @@ SubmissionAction.prototype.withStringsParam = function(name, value, spliter, min
 	if (form.error) this.hasError = true;
 }
 
-SubmissionAction.prototype.withNumberParam = function(name, value, min, max, matchs) {
+PutAction.prototype.withNumberParam = function(name, value, min, max, matchs) {
 	var form = this.form[name] = new DBActionFormItem(this.input[name]);
 	if (!form.valueOf()) {
 		if (value == true) form.error = new Error(0, this.lang(name + "Required"));
@@ -84,7 +84,7 @@ SubmissionAction.prototype.withNumberParam = function(name, value, min, max, mat
 	if (form.error) this.hasError = true;
 }
 
-SubmissionAction.prototype.withEmailParam = function(name, value) {
+PutAction.prototype.withEmailParam = function(name, value) {
 	var form = this.form[name] = new DBActionFormItem(this.input[name]);
 	if (!form.valueOf()) {
 		if (value == true) form.error = new Error(0, this.lang(name + "Required"));
@@ -104,7 +104,7 @@ SubmissionAction.prototype.withEmailParam = function(name, value) {
 	if (form.error) this.hasError = true;
 }
 
-SubmissionAction.prototype.withDateParam = function(name, value, min, max, matchs) {
+PutAction.prototype.withDateParam = function(name, value, min, max, matchs) {
 	var form = this.form[name] = new DBActionFormItem(this.input[name]);
 	if (!form.valueOf()) {
 		if (value == true) form.error = new Error(0, this.lang(name + "Required"));
@@ -127,18 +127,18 @@ SubmissionAction.prototype.withDateParam = function(name, value, min, max, match
 	if (form.error) this.hasError = true;
 }
 
-SubmissionAction.prototype.withBooleanParam = function(name) {
+PutAction.prototype.withBooleanParam = function(name) {
 	var form = this.form[name] = new DBActionFormItem(this.input[name]);
 	if (!form.valueOf()) this.param[name] = false;
 	else this.param[name] = true;
 }
 
-SubmissionAction.prototype.setParamError = function(name, error) {
+PutAction.prototype.setParamError = function(name, error) {
 	this.form[name].error = error;
 	this.hasError = true;
 }
 
-SubmissionAction.prototype.getIdsParam = function() {
+PutAction.prototype.getIdsParam = function() {
 	if (this.input.ids) return this.getNumbers(this.ids, (/\,/ig), 0);
 }
 
