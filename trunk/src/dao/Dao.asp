@@ -1,11 +1,11 @@
 <script language="javascript" runat="server">
-function Dao() {
+function DAO() {
 	this.db = null;
 	this.table = "";
 	this.Pojo = null;
 }
 
-Dao.prototype.list = function(pageSize, currentPage) {
+DAO.prototype.list = function(pageSize, currentPage) {
 	var pojos = [];
 	var recs = this.db.query("SELECT * FROM " + this.table, pageSize, currentPage);
 	if (recs) {
@@ -17,15 +17,15 @@ Dao.prototype.list = function(pageSize, currentPage) {
 	return pojos;
 }
 
-Dao.prototype.update = function(pojos, id) {
+DAO.prototype.update = function(pojos, id) {
 	this.db.update(this.table, this.fromPojo(pojos), "id IN( " + id + ")");
 }
 
-Dao.prototype.save = function(pojos) {
+DAO.prototype.save = function(pojos) {
 	this.db.insert(this.table, this.fromPojo(pojos));
 }
 
-Dao.prototype.del = function(id) {
+DAO.prototype.del = function(id) {
 	this.db.del(this.table, "id IN (" + id + ")");
 }
 </script>

@@ -1,11 +1,11 @@
-<!--#include file="../../dao/Dao.asp" -->
-<!--#include file="../pojos/Category.asp" -->
+<!--#include file="../../dao/DAO.asp" -->
+<!--#include file="Category.asp" -->
 <script language="javascript" runat="server">
-function CategoryDao() {
+function CategoryDAO() {
 	this.table = "Category";
 }
 
-CategoryDao.toPojo = function(record) {
+CategoryDAO.toPojo = function(record) {
 	var category = new Category();
 	category.id = record.get("id");
 	var parentId = record.get("parentId");
@@ -15,7 +15,7 @@ CategoryDao.toPojo = function(record) {
 	return category;
 }
 
-CategoryDao.fromPojo = function(category) {
+CategoryDAO.fromPojo = function(category) {
 	var record = {};
 	if (category.parent) record.parentId = category.parent.id;
 	record.name = category.name;
@@ -23,16 +23,16 @@ CategoryDao.fromPojo = function(category) {
 	return new Map(record);
 }
 
-CategoryDao.prototype = new Dao();
+CategoryDAO.prototype = new DAO();
 
-CategoryDao.prototype.get = function(id, withSubs) {
+CategoryDAO.prototype.get = function(id, withSubs) {
 	if (!withSubs) { // Only one record
 		var sql = "SELECT TOP 1 id, lFlag, rFlag, parentId";
 		sql += ", name, description";
 		sql += " FROM [" + this.table + "] WHERE id = " + id;
 		var record = this.db.query(sql, 1);
 		if (!record) return;
-		return CategoryDao.toPojo(record);
+		return CategoryDAO.toPojo(record);
 	}
 	// Also get sub categories
 	var sql = "SELECT id, parentId, lFlag, rFlag";
@@ -50,7 +50,7 @@ CategoryDao.prototype.get = function(id, withSubs) {
 	var root = new Category();
 	var lastCategory;
 	records.forEach(function(record) {
-		var category = CategoryDao.toPojo(record);
+		var category = CategoryDAO.toPojo(record);
 
 		if (!category.parent) root.push(category);
 		else if (category.parent.id == lastCategory.id) lastCategory.push(category);
@@ -64,7 +64,7 @@ CategoryDao.prototype.get = function(id, withSubs) {
 	return root;
 }
 
-CategoryDao.prototype.move = function(id, isDown) {
+CategoryDAO.prototype.move = function(id, isDown) {
 	if (isDown) {
 		var before = this.db.query("SELECT lFlag, rFlag FROM [" + this.table + "] WHERE id = " + id, 1);
 		var after = this.db.query("SELECT lFlag, rFlag FROM [" + this.table + "] WHERE lFlag = " + (before.get("rFlag") + 1), 1);
@@ -94,15 +94,15 @@ CategoryDao.prototype.move = function(id, isDown) {
 	}, this);
 }
 
-CategoryDao.prototype.up = function(id) {
+CategoryDAO.prototype.up = function(id) {
 	return this.move(id);
 }
 
-CategoryDao.prototype.down = function(id) {
+CategoryDAO.prototype.down = function(id) {
 	return this.move(id, true);
 }
 
-CategoryDao.prototype.save = function(category) {
+CategoryDAO.prototype.save = function(category) {
 	if (!category.parent) { // Save to root
 		var maxFlag = this.db.query("SELECT MAX(rFlag) AS maxFlag FROM [" + this.table + "]", 1).get("maxFlag");
 		var saveItem = {
@@ -133,14 +133,14 @@ CategoryDao.prototype.save = function(category) {
 	}
 }
 
-CategoryDao.prototype.update = function(id, category) {
+CategoryDAO.prototype.update = function(id, category) {
 	if (!id) id = category.id;
 
-	var record = CategoryDao.fromPojo(category);
+	var record = CategoryDAO.fromPojo(category);
 	this.db.update(this.table, record, "id = " + id);
 }
 
-CategoryDao.prototype.del = function(id) {
+CategoryDAO.prototype.del = function(id) {
 	var sql = "SELECT TOP 1 id, lFlag, rFlag";
 	sql += " FROM [" + this.table + "] WHERE id = " + id;
 	var record = this.db.query(sql, 1);
