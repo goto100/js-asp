@@ -3,6 +3,7 @@
 function HttpRequest() {
 	this.search = getSearch();
 	this.input = getInput();
+	this.uploadPath;
 
 	this.method = Request.ServerVariables("REQUEST_METHOD");
 	var methodOverwrite = this.input.get("__method__");
@@ -20,12 +21,12 @@ function HttpRequest() {
 			var items = uploader.getItems();
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
-				if (instanceOf(item.value, UploaderFile)) {
-					if (!this.input.get(item.name)) this.input.put(item.name, []);
-					if (item.value.name) this.input.get(item.name).push(item.value);
+				if (item.value instanceof UploaderFile) {
+					if (!input.get(item.name)) input.put(item.name, []);
+					if (item.value.name) input.get(item.name).push(item.value);
 				} else {
-					if (!this.input.get(item.name)) this.input.put(item.name, item.value);
-					else this.input.put(item.name, this.input.get(item.name) += ", " + item.value);
+					if (!input.get(item.name)) input.put(item.name, item.value);
+					else input.put(item.name, input.get(item.name) += ", " + item.value);
 				}
 			}
 		} else {

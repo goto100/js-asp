@@ -1,27 +1,7 @@
 <!--#include file="UploaderFile.asp" -->
 <script language="javascript" runat="server">
-/*
-This is a request data
-********************************************************************
------------------------------196291262324084
-Content-Disposition: form-data; name="file"; filename="file.txt"
-Content-Type: text/plain
-
-content
------------------------------196291262324084
-Content-Disposition: form-data; name="submit"
-
-submit
------------------------------196291262324084
-Content-Disposition: form-data; name="text"
-
-text
------------------------------196291262324084--
-********************************************************************
-*/
-
 function Uploader() {
-	this.filePath = Server.MapPath("/js-asp/img/upload.xml");
+	this.filePath = UPLOAD_PATH + "/.upload.xml";
 	this.fso = Server.CreateObject("Scripting.FileSystemObject");
 	this.stream = Server.CreateObject("ADODB.Stream");
 	this.stream.Type = 1;

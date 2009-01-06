@@ -6,7 +6,7 @@ function Page() {
 }
 
 Page.prototype.show = function(name) {
-	this.template[name].call(this);
+	this.template[name].apply(this, Array.slice(arguments, 1));
 }
 
 Page.prototype.output = function() {

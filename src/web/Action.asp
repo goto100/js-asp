@@ -4,8 +4,9 @@ function Action() {
 	this.request;
 	this.search;
 	this.input;
+	this.param;
 	this.action = function() {
-		writeln("This action was not defined.");
+		writeln("This action is undefined.");
 	};
 }
 
