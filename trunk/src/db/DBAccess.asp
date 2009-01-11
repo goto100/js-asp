@@ -143,13 +143,13 @@ DBAccess.prototype.insert = function(table, map, returnRecord) {
 		var rs = this.createRecordSet();
 		rs.Open("SELECT * FROM [" + table + "]", this._conn, 1, 3);
 		rs.AddNew();
-		map.forEach(function(value, name) {
+		map.forEach((function(value, name) {
 			if (value !== undefined) {
 				if (value.constructor == String) rs(name) = this.checkSQL(value);
 				else if (value && value.constructor == Date) rs(name) = new Date(value.format("yyyy/MM/dd HH:mm:ss", 0)).getVarDate();
-				else rs(i) = value;
+				else rs(name) = value;
 			}
-		});
+		}).bind(this));
 		rs.Update();
 		return new Record(rs);
 	} else {
