@@ -1,4 +1,5 @@
 <!--#include file="base2.asp" -->
+<!--#include file="json2.asp" -->
 <!--#include file="web/Controller.asp" -->
 <!--#include file="web/Action.asp" -->
 <script language="javascript" runat="server">
