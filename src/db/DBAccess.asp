@@ -122,12 +122,15 @@ DBAccess.prototype.update = function(table, map, where) {
 	var sql = "UPDATE [" + table + "] SET ";
 	if (map.constructor == String) sql += map;
 	else {
+		var changed = false;
 		map.forEach(function(value, name) {
 			if (value !== undefined) {
 				sql += "[" + name + "]=";
 				sql += DBAccess.getSQLStr(value) + ", ";
+				changed = true;
 			}
 		});
+		if (!changed) return;
 		sql = sql.slice(0, -2);
 	}
 	if (where) sql += " WHERE " + where;

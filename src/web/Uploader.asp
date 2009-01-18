@@ -1,7 +1,7 @@
 <!--#include file="UploaderFile.asp" -->
 <script language="javascript" runat="server">
 function Uploader() {
-	this.filePath = UPLOAD_PATH + "/.upload.xml";
+	this.filePath = Server.MapPath(UPLOAD_PATH) + "/.upload.xml";
 	this.fso = Server.CreateObject("Scripting.FileSystemObject");
 	this.stream = Server.CreateObject("ADODB.Stream");
 	this.stream.Type = 1;

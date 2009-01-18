@@ -4,6 +4,7 @@ function PostAction() {
 	this.param = {};
 	this.form;
 	this.hasError = false;
+	this.errors = new Map();
 }
 PostAction.prototype = new Action();
 

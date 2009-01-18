@@ -2,6 +2,7 @@
 function Page() {
 	this.id = "";
 	this.styles = [];
+	this.scripts = [];
 	this.template = {};
 }
 
