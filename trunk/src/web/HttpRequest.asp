@@ -13,6 +13,29 @@ function HttpRequest() {
 	this.path = String(Request.ServerVariables("PATH_INFO"));
 	this._ip;
 
+	function stringToMap(str) {
+		var maps = str.split("&");
+		var map = new Map();
+		if (maps[0] && maps[0].indexOf("=") == -1) {
+			map.path = maps[0].split(/\/+/ig);
+			map.path.toString = function() {
+				return this.join("/");
+			}
+			maps = maps.splice(0, 1);
+		}
+		for (var item, pos, i = 0; i < maps.length; i++) {
+			pos = maps[i].indexOf("=");
+			item = {
+				name: maps[i].substr(0, pos),
+				value: maps[i].substr(pos + 1)
+			}
+			var value = map.get(item.name) || [];
+			value.push(item.value);
+			map.put(item.name, value);
+		}
+		return map;
+	}
+
 	// Request.Form
 	function getInput() {
 		var input = new Map();
@@ -29,42 +52,13 @@ function HttpRequest() {
 					else input.put(item.name, input.get(item.name) += ", " + item.value);
 				}
 			}
-		} else {
-			var name;
-			var e = new Enumerator(Request.Form);
-			for (var i = 0; !e.atEnd(); e.moveNext(), i++) {
-				name = String(e.item());
-				input.put(name, String(Request.Form(name)));
-			}
-		}
-		return input;
+			return input;
+		} else return stringToMap(String(Request.Form));
 	}
 
 	// Request.QueryString
 	function getSearch() {
-		var queryString = String(Request.QueryString);
-		var searches = queryString.split("&");
-		var search = new Map();
-		if (searches[0] && searches[0].indexOf("=") == -1) {
-			search.path = searches[0].split("/");
-			search.path = search.path.filter(function(part) {
-				if (part) return true;
-			});
-			search.path.toString = function() {
-				return this.join("/");
-			}
-		}
-		for (var item, pos, i = 1/* Ignore path */; i < searches.length; i++) {
-			pos = searches[i].indexOf("=");
-			item = {
-				name: searches[i].substr(0, pos),
-				value: searches[i].substr(pos + 1)
-			}
-			var value = search.get(item.name) || [];
-			value.push(item.value);
-			search.put(item.name, value);
-		}
-		return search;
+		return stringToMap(String(Request.QueryString));
 	}
 }
 
