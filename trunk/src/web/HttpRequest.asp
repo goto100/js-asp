@@ -27,7 +27,7 @@ function HttpRequest() {
 			pos = maps[i].indexOf("=");
 			item = {
 				name: maps[i].substr(0, pos),
-				value: maps[i].substr(pos + 1)
+				value: decodeURI(maps[i].substr(pos + 1))
 			}
 			var value = map.get(item.name) || [];
 			value.push(item.value);
