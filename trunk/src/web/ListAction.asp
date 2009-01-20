@@ -20,9 +20,9 @@ ListAction.prototype.getPageSize = function(normal) {
 
 // Page number
 ListAction.prototype.getCurrentPage = function() {
-	if (this.search.page) {
+	if (this.search.get("page")) {
 		try {
-			return this.getNumber(this.search.page, 1);
+			return this.getNumber(this.search.get("page"), 1);
 		} catch (e) {
 			return 1;
 		}

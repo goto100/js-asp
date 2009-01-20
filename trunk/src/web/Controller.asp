@@ -9,6 +9,7 @@
 function Controller() {
 	this.request = new HttpRequest();
 	this.actions = [];
+	this.context;
 }
 
 Controller.prototype.add = function(path, ActionClass) {
