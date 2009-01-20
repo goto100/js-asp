@@ -7,7 +7,7 @@ function HttpRequest() {
 
 	this.method = Request.ServerVariables("REQUEST_METHOD");
 	var methodOverwrite = this.input.get("__method__");
-	if (methodOverwrite) methodOverwrite = methodOverwrite.toUpperCase();
+	if (methodOverwrite) methodOverwrite = methodOverwrite[0].toUpperCase();
 	if (["GET", "POST", "PUT", "DELETE", "HEAD"].contains(methodOverwrite)) this.method = methodOverwrite;
 
 	this.path = String(Request.ServerVariables("PATH_INFO"));

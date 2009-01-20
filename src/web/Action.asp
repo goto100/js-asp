@@ -8,9 +8,11 @@ function Action() {
 	this.action = function() {
 		writeln("This action is undefined.");
 	};
+	this._controller;
 }
 
 Action.prototype.setController = function(controller) {
+	this._controller = controller;
 	this.request = controller.request;
 	this.search = this.request.search;
 	this.input = this.request.input;
@@ -21,6 +23,7 @@ Action.prototype.redirect = function(url) {
 }
 
 Action.prototype.execute = function() {
+	this._controller.context = this;
 	this.action();
 }
 
