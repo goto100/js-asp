@@ -7,7 +7,7 @@ function HttpRequest() {
 
 	this.method = Request.ServerVariables("REQUEST_METHOD");
 	var methodOverwrite = this.input.get("__method__");
-	if (methodOverwrite) methodOverwrite = methodOverwrite[0].toUpperCase();
+	if (methodOverwrite) methodOverwrite = methodOverwrite.toUpperCase();
 	if (["GET", "POST", "PUT", "DELETE", "HEAD"].contains(methodOverwrite)) this.method = methodOverwrite;
 
 	this.path = String(Request.ServerVariables("PATH_INFO"));
@@ -21,16 +21,19 @@ function HttpRequest() {
 			map.path.toString = function() {
 				return this.join("/");
 			}
-			maps = maps.splice(0, 1);
-		}
+			maps.splice(0, 1);
+		};
 		for (var item, pos, i = 0; i < maps.length; i++) {
 			pos = maps[i].indexOf("=");
 			item = {
 				name: maps[i].substr(0, pos),
 				value: decodeURI(maps[i].substr(pos + 1))
 			}
-			var value = map.get(item.name) || [];
-			value.push(item.value);
+			var value = map.get(item.name);
+			if (value) {
+				if (!(value instanceof Array)) value = [value];
+				value.push(item.value);
+			} else value = item.value;
 			map.put(item.name, value);
 		}
 		return map;

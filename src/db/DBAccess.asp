@@ -72,7 +72,6 @@ DBAccess.prototype.close = function() {
 // Execute
 DBAccess.prototype.execute = function(sql) {
 	if (!this.opened) this.open();
-	;;; writeln(sql)
 	try {
 		return this._conn.Execute(sql, 0, 0x0001);
 	} catch(e) {

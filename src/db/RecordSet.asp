@@ -10,7 +10,7 @@ function RecordSet(rs) {
 }
 
 RecordSet.prototype.forEach = function(callback) {
-	if (callback) for (; !this.atEnd(); this.moveNext()) callback(new Record(this._rs));
+	if (callback) for (i = 0; !this.atEnd(); this.moveNext(), i++) callback(new Record(this._rs), i);
 }
 
 RecordSet.prototype.atEnd = function() {
