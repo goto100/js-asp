@@ -8,7 +8,7 @@ function Category(id) {
 
 Category.prototype.push = function(category) {
 	category.parent = this;
-	category.depth = this.depth + 1;
+	if (this.id) category.depth = this.depth + 1; // root depth is null, root children depth is 0.
 	this[this.length++] = category;
 }
 

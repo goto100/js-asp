@@ -1,6 +1,7 @@
 <script language="javascript" runat="server">
 function Page() {
 	this.id = "";
+	this.title = "";
 	this.styles = [];
 	this.scripts = [];
 	this.template = {};
