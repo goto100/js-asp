@@ -56,7 +56,16 @@ function HttpRequest() {
 				}
 			}
 			return input;
-		} else return stringToMap(String(Request.Form));
+		} else {
+			var map = new Map();
+			var name;
+			var e = new Enumerator(Request.Form);
+			for (var i = 0; !e.atEnd(); e.moveNext(), i++) {
+				name = String(e.item());
+				map.put(name, String(Request.Form(name)));
+			}
+			return map;
+		}
 	}
 
 	// Request.QueryString
